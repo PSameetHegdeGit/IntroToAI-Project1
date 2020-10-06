@@ -11,6 +11,10 @@ def get_tile_color(tile_contents):
         tile_color = constants.GREY
     elif tile_contents == 2:
         tile_color = constants.DARKORANGE
+    elif tile_contents == 'a':
+        tile_color = constants.GREEN
+    elif tile_contents == 'b':
+        tile_color = constants.RED
     return tile_color
 
 def draw_map(surface, map_rows):
@@ -58,8 +62,7 @@ def read_map(mapfile):
 def main():
     # world_map = read_map(constants.MAPFILE)
     instanceOfMap = MapData()
-    instanceOfMap.createDefaultMap()
-    instanceOfMap.generatingBlockedCells()
+    instanceOfMap.runSuite()
 
 
     surface = initialize_game()

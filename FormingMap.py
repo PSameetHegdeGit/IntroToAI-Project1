@@ -25,6 +25,7 @@ class MapData():
         self.generatingHardToTraverseCells()
         self.generateBoostCells()
         self.generateBlockedCells()
+        self.generateStartAndEndIndices()
 
     def createDefaultMap(self):
         self.map = [[1 for column in range(constants.NUMBER_OF_BLOCKS_WIDE)]for row in range(constants.NUMBER_OF_BLOCKS_HIGH)]
@@ -65,34 +66,34 @@ class MapData():
         if(sideSelection == "R1"):
             for x in range(row, row + 20):
                 if self.map[x][column] == 1:
-                    self.map[x][column] = 3
+                    self.map[x][column] = 'a'
                 elif self.map[x][column] == 2:
-                    self.map[x][column] = 4
+                    self.map[x][column] = 'b'
 
                 row = x
 
         elif (sideSelection == "R2"):
             for x in range(row, row - 20, -1):
                 if self.map[x][column] == 1:
-                    self.map[x][column] = 3
+                    self.map[x][column] = 'a'
                 elif self.map[x][column] == 2:
-                    self.map[x][column] = 4
+                    self.map[x][column] = 'b'
 
                 row = x
         elif(sideSelection == "C1"):
             for y in range(column, column + 20):
                 if self.map[row][y] == 1:
-                    self.map[row][y] = 3
+                    self.map[row][y] = 'a'
                 elif self.map[row][y] == 2:
-                    self.map[row][y] = 4
+                    self.map[row][y] = 'b'
 
                 column = y
         elif(sideSelection == "C2"):
             for y in range(column, column - 20, -1):
                 if self.map[row][y] == 1:
-                    self.map[row][y] = 3
+                    self.map[row][y] = 'a'
                 elif self.map[row][y] == 2:
-                    self.map[row][y] = 4
+                    self.map[row][y] = 'b'
 
                 column = y
 
@@ -133,33 +134,33 @@ class MapData():
             if route == "Up":
                 for x in range(row, row - 20, -1):
                     if self.map[x][column] == 1:
-                        self.map[x][column] = 3
+                        self.map[x][column] = 'a'
                     elif self.map[x][column] == 2:
-                        self.map[x][column] = 4
+                        self.map[x][column] = 'b'
 
                     row = x
             elif route == "Down":
                 for x in range(row, row + 20):
                     if self.map[x][column] == 1:
-                        self.map[x][column] = 3
+                        self.map[x][column] = 'a'
                     elif self.map[x][column] == 2:
-                        self.map[x][column] = 4
+                        self.map[x][column] = 'b'
 
                     row = x
             elif route == "Left":
                 for y in range(column, column - 20, -1):
                     if self.map[row][y] == 1:
-                        self.map[row][y] = 3
+                        self.map[row][y] = 'a'
                     elif self.map[row][y] == 2:
-                        self.map[row][y] = 4
+                        self.map[row][y] = 'b'
 
                     column = y
             elif route == "Right":
                 for y in range(column, column + 20):
                     if self.map[row][y] == 1:
-                        self.map[row][y] = 3
+                        self.map[row][y] = 'a'
                     elif self.map[row][y] == 2:
-                        self.map[row][y] = 4
+                        self.map[row][y] = 'b'
 
                     column = y
 
@@ -176,10 +177,39 @@ class MapData():
         indices = [(row, column) for row in range(len(self.map)) for column in range(len(self.map[0]))]
 
         for idx in random.choices(indices, k=math.floor(len(indices) * 0.2)):
-            if self.map[idx[0]][idx[1]] == 3 or self.map[idx[0]][idx[1]] == 4:
+            if self.map[idx[0]][idx[1]] == 'a' or self.map[idx[0]][idx[1]] == 'b':
                 continue
             else:
                 self.map[idx[0]][idx[1]] = 0
+
+
+    def generateStartAndEndIndices(self):
+
+        mappingChosenRegionToTuple = {'TOP': (0, random.randrange(0, 160)), 'BOTTOM': (119, random.randrange(0, 160)),
+                        'LEFT': (random.randrange(0, 120), 0), 'RIGHT': (random.randrange(0, 120), 159)
+                       }
+
+        #TODO
+        # DOES NOT CHECK IF PLACING IN BLOCKED REGION -- NEED TO FIGURE OUT HOW TO CALL RANDRANGE ON SUBSEQUENT ITERATIONS
+        # ALSO NEED TO INCLUDE AMONG 20 ROWS or 20 COLUMNS
+        chosenRegion = random.choice(list(mappingChosenRegionToTuple.keys()))
+        startidx = mappingChosenRegionToTuple[chosenRegion]
+
+        self.map[startidx[0]][startidx[1]] = 'c'
+
+        del mappingChosenRegionToTuple[chosenRegion]
+
+        chosenRegion = random.choice(list(mappingChosenRegionToTuple.keys()))
+
+        endidx = mappingChosenRegionToTuple[chosenRegion]
+        self.map[endidx[0]][endidx[1]] = 'c'
+
+        print(startidx, endidx)
+
+        return startidx, endidx
+
+
+
 
 
 
@@ -201,6 +231,7 @@ if __name__ == "__main__":
     testMap.generatingHardToTraverseCells()
     testMap.generateBoostCells()
     testMap.generateBlockedCells()
+    testMap.generateStartAndEndIndices()
 
 
 

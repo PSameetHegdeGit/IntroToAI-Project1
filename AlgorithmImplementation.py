@@ -1,0 +1,40 @@
+import math
+
+
+
+
+class Node():
+
+    def __init__(self, idx: tuple, endidx: tuple, prt):
+        # Current location as a tuple
+        self.location = idx
+
+        # Parent that we took to arrive at current location
+        self.parent = prt
+
+        # g(n) value
+        self.distanceFromStartToCurrent = 0
+
+        #f(n) value = g(n) + h(n) where h(n) is the heuristic
+        self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.calculateHeuristic(endidx)
+
+
+
+    def calculateHeuristic(self, endidx: tuple):
+
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+
+        endRow = endidx[0]
+        endColumn = endidx[1]
+
+        # using the distance formula to calculate the heuristic then taking the floor; idk if we want to floor it or just simply compare the float vals
+        return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))
+
+
+
+
+
+
+def UnweightedAstarSearch():
+    pass

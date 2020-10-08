@@ -1,5 +1,5 @@
 import math
-
+import constants
 
 
 
@@ -30,6 +30,16 @@ class Node():
 
         # using the distance formula to calculate the heuristic then taking the floor; idk if we want to floor it or just simply compare the float vals
         return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))
+
+    def expandNode(self):
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+
+        # This expansion definitely can be condensed
+        return [(currentRow - 1, currentColumn), (currentRow + 1, currentColumn), (currentRow, currentColumn - 1), (currentRow, currentColumn + 1),
+                (currentRow - 1, currentColumn - 1), (currentRow - 1, currentColumn + 1), (currentRow + 1, currentColumn + 1), (currentRow + 1, currentColumn - 1)]
+
+
 
 
 

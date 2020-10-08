@@ -4,6 +4,7 @@ import pandas
 import numpy as np
 import random
 import constants
+import math
 
 
 
@@ -15,7 +16,7 @@ class MapData():
 
     def __init__(self):
         #object lvl fields can be initialized in here
-        self.map = None
+        self.map = []
 
 
 
@@ -23,10 +24,10 @@ class MapData():
         self.createDefaultMap()
         self.generatingHardToTraverseCells()
         self.generateBoostCells()
-        # self.generateBlockedCells()
+        self.generateBlockedCells()
 
     def createDefaultMap(self):
-        self.map = np.ones((constants.NUMBER_OF_BLOCKS_HIGH, constants.NUMBER_OF_BLOCKS_WIDE))
+        self.map = [[1 for column in range(constants.NUMBER_OF_BLOCKS_WIDE)]for row in range(constants.NUMBER_OF_BLOCKS_HIGH)]
 
     def generatingHardToTraverseCells(self):
 
@@ -37,7 +38,7 @@ class MapData():
                     break
                 for j in range(y, y + 31):
                     if j < 160:
-                        self.map[i, j] = random.choice([1,2])
+                        self.map[i][j] = random.choice([1,2])
                     else:
                         break
 
@@ -63,35 +64,35 @@ class MapData():
 
         if(sideSelection == "R1"):
             for x in range(row, row + 20):
-                if self.map[x, column] == 1:
-                    self.map[x, column] = 3
-                elif self.map[x, column] == 2:
-                    self.map[x, column] = 4
+                if self.map[x][column] == 1:
+                    self.map[x][column] = 3
+                elif self.map[x][column] == 2:
+                    self.map[x][column] = 4
 
                 row = x
 
         elif (sideSelection == "R2"):
             for x in range(row, row - 20, -1):
-                if self.map[x, column] == 1:
-                    self.map[x, column] = 3
-                elif self.map[x, column] == 2:
-                    self.map[x, column] = 4
+                if self.map[x][column] == 1:
+                    self.map[x][column] = 3
+                elif self.map[x][column] == 2:
+                    self.map[x][column] = 4
 
                 row = x
         elif(sideSelection == "C1"):
             for y in range(column, column + 20):
-                if self.map[row, y] == 1:
-                    self.map[row, y] = 3
-                elif self.map[row, y] == 2:
-                    self.map[row, y] = 4
+                if self.map[row][y] == 1:
+                    self.map[row][y] = 3
+                elif self.map[row][y] == 2:
+                    self.map[row][y] = 4
 
                 column = y
         elif(sideSelection == "C2"):
             for y in range(column, column - 20, -1):
-                if self.map[row, y] == 1:
-                    self.map[row, y] = 3
-                elif self.map[row, y] == 2:
-                    self.map[row, y] = 4
+                if self.map[row][y] == 1:
+                    self.map[row][y] = 3
+                elif self.map[row][y] == 2:
+                    self.map[row][y] = 4
 
                 column = y
 
@@ -126,49 +127,60 @@ class MapData():
 
 
 
-    # Given a particular direction move by 20
+    # Given a particular direction move by 20 -- NEEDS TO BE MODIFIED
     def tryTranslating20Cells(self, route, row, column):
+        try:
+            if route == "Up":
+                for x in range(row, row - 20, -1):
+                    if self.map[x][column] == 1:
+                        self.map[x][column] = 3
+                    elif self.map[x][column] == 2:
+                        self.map[x][column] = 4
 
-        if route == "Up":
-            for x in range(row, row - 20, -1):
-                if self.map[x, column] == 1:
-                    self.map[x, column] = 3
-                elif self.map[x, column] == 2:
-                    self.map[x, column] = 4
+                    row = x
+            elif route == "Down":
+                for x in range(row, row + 20):
+                    if self.map[x][column] == 1:
+                        self.map[x][column] = 3
+                    elif self.map[x][column] == 2:
+                        self.map[x][column] = 4
 
-                row = x
-        elif route == "Down":
-            for x in range(row, row + 20):
-                if self.map[x, column] == 1:
-                    self.map[x, column] = 3
-                elif self.map[x, column] == 2:
-                    self.map[x, column] = 4
+                    row = x
+            elif route == "Left":
+                for y in range(column, column - 20, -1):
+                    if self.map[row][y] == 1:
+                        self.map[row][y] = 3
+                    elif self.map[row][y] == 2:
+                        self.map[row][y] = 4
 
-                row = x
-        elif route == "Left":
-            for y in range(column, column - 20, -1):
-                if self.map[row, y] == 1:
-                    self.map[row, y] = 3
-                elif self.map[row, y] == 2:
-                    self.map[row, y] = 4
+                    column = y
+            elif route == "Right":
+                for y in range(column, column + 20):
+                    if self.map[row][y] == 1:
+                        self.map[row][y] = 3
+                    elif self.map[row][y] == 2:
+                        self.map[row][y] = 4
 
-                column = y
-        elif route == "Right":
-            for y in range(column, column + 20):
-                if self.map[row, y] == 1:
-                    self.map[row, y] = 3
-                elif self.map[row, y] == 2:
-                    self.map[row, y] = 4
+                    column = y
 
-                column = y
-
+        except:
+            pass
 
         return row, column
 
 
 
+
     def generateBlockedCells(self):
-        pass
+
+        indices = [(row, column) for row in range(len(self.map)) for column in range(len(self.map[0]))]
+
+        for idx in random.choices(indices, k=math.floor(len(indices) * 0.2)):
+            if self.map[idx[0]][idx[1]] == 3 or self.map[idx[0]][idx[1]] == 4:
+                continue
+            else:
+                self.map[idx[0]][idx[1]] = 0
+
 
 
 
@@ -188,6 +200,7 @@ if __name__ == "__main__":
     testMap.createDefaultMap()
     testMap.generatingHardToTraverseCells()
     testMap.generateBoostCells()
+    testMap.generateBlockedCells()
 
 
 

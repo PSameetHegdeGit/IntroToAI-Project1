@@ -4,17 +4,18 @@ from FormingMap import *
 
 def get_tile_color(tile_contents):
 
-    tile_color = constants.GREY
+    tile_color = None
     if tile_contents == 0:
-        tile_color = constants.BROWN
+        tile_color = constants.BLACK
     elif tile_contents == 1:
         tile_color = constants.GREY
     elif tile_contents == 2:
         tile_color = constants.DARKORANGE
-    elif tile_contents == 'a':
+    elif tile_contents == 3:
         tile_color = constants.GREEN
-    elif tile_contents == 'b':
-        tile_color = constants.RED
+    elif tile_contents == 4:
+        tile_color = constants.UGLY_PINK
+
     return tile_color
 
 def draw_map(surface, map_rows):
@@ -63,6 +64,7 @@ def main():
     # world_map = read_map(constants.MAPFILE)
     instanceOfMap = MapData()
     instanceOfMap.runSuite()
+
 
 
     surface = initialize_game()

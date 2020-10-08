@@ -13,7 +13,10 @@ class Node():
         self.parent = prt
 
         # g(n) value
-        self.distanceFromStartToCurrent = 0
+        if prt == None:
+            self.distanceFromStartToCurrent = 0
+        else:
+            self.distanceFromStartToCurrent = prt.distanceFromStartToParent
 
         #f(n) value = g(n) + h(n) where h(n) is the heuristic
         self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.calculateHeuristic(endidx)
@@ -46,5 +49,15 @@ class Node():
 
 
 
-def UnweightedAstarSearch():
-    pass
+def UnweightedAstarSearch(startidx, endidx):
+
+    selectedNode = Node(startidx, endidx, None)
+
+    print(selectedNode.location)
+    print(selectedNode.distanceFromStartToCurrent)
+    print(selectedNode.sumOfHeuristicAndDistanceFromStartToCurrent)
+
+
+
+if __name__ == "__main__":
+    UnweightedAstarSearch((0,0), (119,159))

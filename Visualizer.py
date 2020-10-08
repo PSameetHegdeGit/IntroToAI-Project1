@@ -11,10 +11,14 @@ def get_tile_color(tile_contents):
         tile_color = constants.GREY
     elif tile_contents == 2:
         tile_color = constants.DARKORANGE
-    elif tile_contents == 3:
-        tile_color = constants.GREEN
-    elif tile_contents == 4:
+    elif tile_contents == 'a':
+        tile_color = constants.BLUE
+    elif tile_contents == 'b':
         tile_color = constants.UGLY_PINK
+    # For now lets use 5 to represent the start and end indices
+    elif tile_contents == 'c':
+        tile_color = constants.GOLD
+
 
     return tile_color
 

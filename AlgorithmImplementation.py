@@ -16,10 +16,20 @@ class Node():
         if prt == None:
             self.distanceFromStartToCurrent = 0
         else:
-            self.distanceFromStartToCurrent = 50
+            self.distanceFromStartToCurrent = prt.distanceFromStartToCurrent + self.calculateDistanceFromParentToCurrent()
 
         #f(n) value = g(n) + h(n) where h(n) is the heuristic
         self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.calculateHeuristic(endidx)
+
+    # TODO: Need to modify this code for a weighted search
+    def calculateDistanceFromParentToCurrent(self):
+        # For Unweighted search
+        if abs(self.parent.location[0] - self.location[0]) == 1 and abs(self.parent.location[1] - self.location[1]) == 1:
+            return math.sqrt(2)
+        elif abs(self.parent.location[0] - self.location[0]) == 1 or abs(self.parent.location[1] - self.location[1]) == 1:
+            return 1
+
+
 
 
 
@@ -58,11 +68,7 @@ class Node():
 
 
 
-
-
-
-
-
+# TODO: Need to modify this code for weighted search
 def UnweightedAstarSearch(startidx, endidx):
 
 
@@ -73,6 +79,9 @@ def UnweightedAstarSearch(startidx, endidx):
 
     # expand
     open.extend(selectedNode.expandNode())
+
+   
+
 
 
 

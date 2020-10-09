@@ -8,7 +8,7 @@ class Node():
     def __init__(self, idx: tuple, endidx: tuple, prt):
         # Current location as a tuple
         self.location = idx
-
+        self.endidx = endidx
         # Parent that we took to arrive at current location
         self.parent = prt
 
@@ -16,7 +16,7 @@ class Node():
         if prt == None:
             self.distanceFromStartToCurrent = 0
         else:
-            self.distanceFromStartToCurrent = prt.distanceFromStartToParent
+            self.distanceFromStartToCurrent = 50
 
         #f(n) value = g(n) + h(n) where h(n) is the heuristic
         self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.calculateHeuristic(endidx)
@@ -35,12 +35,26 @@ class Node():
         return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))
 
     def expandNode(self):
+
+        def checkIfInBoundsAndTurnIntoNode(expansion: list):
+
+            expansion = [Node(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
+
+
+
+            return expansion
+
         currentRow = self.location[0]
         currentColumn = self.location[1]
 
+
         # This expansion definitely can be condensed
-        return [(currentRow - 1, currentColumn), (currentRow + 1, currentColumn), (currentRow, currentColumn - 1), (currentRow, currentColumn + 1),
+        expansion = [(currentRow - 1, currentColumn), (currentRow + 1, currentColumn), (currentRow, currentColumn - 1), (currentRow, currentColumn + 1),
                 (currentRow - 1, currentColumn - 1), (currentRow - 1, currentColumn + 1), (currentRow + 1, currentColumn + 1), (currentRow + 1, currentColumn - 1)]
+
+        return checkIfInBoundsAndTurnIntoNode(expansion)
+
+
 
 
 
@@ -51,11 +65,16 @@ class Node():
 
 def UnweightedAstarSearch(startidx, endidx):
 
+
     selectedNode = Node(startidx, endidx, None)
 
-    print(selectedNode.location)
-    print(selectedNode.distanceFromStartToCurrent)
-    print(selectedNode.sumOfHeuristicAndDistanceFromStartToCurrent)
+    open = []
+    closed = []
+
+    # expand
+    open.extend(selectedNode.expandNode())
+
+
 
 
 

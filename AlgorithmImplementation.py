@@ -30,9 +30,6 @@ class Node():
             return 1
 
 
-
-
-
     def calculateHeuristic(self, endidx: tuple):
 
         currentRow = self.location[0]
@@ -68,19 +65,40 @@ class Node():
 
 
 
+
+
+
 # TODO: Need to modify this code for weighted search
 def UnweightedAstarSearch(startidx, endidx):
 
-
+    # Selected Node will be initialized to the start node
     selectedNode = Node(startidx, endidx, None)
 
     open = []
     closed = []
 
-    # expand
+    # initial expansion of the start node
     open.extend(selectedNode.expandNode())
+    closed.append(selectedNode)
 
-   
+    # TODO: BELOW NEEDS TO BE MODIFIED SINCE SELECTED NODES WILL EXPAND AND APPEND TO OPEN NODES THAT ARE IN CLOSED SET 
+    while selectedNode.location != endidx:
+
+        for node in open:
+            if node.sumOfHeuristicAndDistanceFromStartToCurrent < selectedNode.sumOfHeuristicAndDistanceFromStartToCurrent:
+                selectedNode = node
+
+        # remove the selected node from the open list then append to the closed list
+        closed.append(open.remove(selectedNode))
+
+        open.extend(selectedNode.expandNode())
+
+
+
+
+
+
+
 
 
 

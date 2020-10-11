@@ -52,7 +52,3 @@ class MinHeap():
 
 
 
-# For Testing
-if __name__ == "__main__":
-    open = MinHeap()
-    open.minheap = [Node((0,0), (0,4), None), Node((0,1), (0,4), None)]

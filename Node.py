@@ -5,6 +5,7 @@ import constants
 
 class Node():
 
+    weight = 1
 
     def __init__(self, idx: tuple, endidx: tuple, prt):
         # Current location as a tuple
@@ -12,15 +13,13 @@ class Node():
         self.endidx = endidx
         # Parent that we took to arrive at current location
         self.parent = prt
-
-        # g(n) value
         if prt == None:
             self.distanceFromStartToCurrent = 0
         else:
             self.distanceFromStartToCurrent = prt.distanceFromStartToCurrent + self.calculateDistanceFromParentToCurrent()
 
-        #f(n) value = g(n) + h(n) where h(n) is the heuristic
-        self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.calculateHeuristic(endidx)
+        # when weight is one we're performing a unweighted search, when weight > 1 we are performing a weighted search
+        self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.weight * self.calculateEuclideanHeuristic(self.endidx)
 
 
     def __eq__(self, other):
@@ -42,7 +41,7 @@ class Node():
 
 
     # Using Euclidean Distance
-    def calculateHeuristic(self, endidx: tuple):
+    def calculateEuclideanHeuristic(self, endidx: tuple):
 
         currentRow = self.location[0]
         currentColumn = self.location[1]
@@ -83,3 +82,16 @@ class Node():
                 (currentRow - 1, currentColumn - 1), (currentRow - 1, currentColumn + 1), (currentRow + 1, currentColumn + 1), (currentRow + 1, currentColumn - 1)]
 
         return FilterAndTurnIntoNode(expansion, open, closed)
+
+
+
+
+
+class UniformCostNode(Node):
+
+    def __init__(self):
+        pass
+
+
+
+

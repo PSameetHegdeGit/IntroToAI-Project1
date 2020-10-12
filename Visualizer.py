@@ -77,7 +77,9 @@ def main():
     surface = initialize_game()
 
 
-    UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
+    # UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
+    WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+
 
     game_loop(surface, instanceOfMap.map)
 

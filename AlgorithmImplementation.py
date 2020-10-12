@@ -1,7 +1,7 @@
 import math
 import constants
 from MinHeap import MinHeap
-from Node import Node
+from Node import *
 
 
 def backtrack(node: Node, startidx: tuple, mapToSearch):
@@ -51,7 +51,33 @@ def UnweightedAstarSearch(startidx, endidx, mapToSearch):
     print(backtrack(selectedNode, startidx, mapToSearch))
 
 
+# Exactly the same as unweighted Astar but we set the value of weight > 1
+def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
+    # Selected Node will be initialized to the start node
+    selectedNode = Node(startidx, endidx, None)
+    selectedNode.weight = weight
 
+    # Open is a Min. Heap
+    open = MinHeap()
+
+    # Using dictionary instead of array to improve search time; having a separate heap and openindices
+    openIndices = {}
+    closed = {}
+
+    # TODO: ALSO NEVER CHECKED IF CELL IS BLOCKED
+    while selectedNode.location != endidx:
+
+        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
+
+        for node in expansion:
+            open.insert(node)
+            openIndices[node.location] = node
+
+        selectedNode = open.minheap[0]
+        open.remove()
+        closed[selectedNode.location] = selectedNode
+
+    print(backtrack(selectedNode, startidx, mapToSearch))
 
 
 if __name__ == "__main__":

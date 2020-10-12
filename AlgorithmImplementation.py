@@ -30,17 +30,9 @@ def UnweightedAstarSearch(startidx, endidx):
         for node in selectedNode.expandNode(open.minheap, closed):
            open.insert(node)
 
+        selectedNode = open.minheap[0]
+        open.remove()
         closed.append(selectedNode)
-
-        idxToExpand = 0
-        idx = 0
-
-
-
-        selectedNode = open[idxToExpand]
-        closed.append(selectedNode)
-        open.minheap.remove(open[idxToExpand])
-
 
     print(backtrack(selectedNode, startidx))
 
@@ -49,9 +41,8 @@ def UnweightedAstarSearch(startidx, endidx):
 
 
 if __name__ == "__main__":
-    # UnweightedAstarSearch((0,0), (10,23))
+    UnweightedAstarSearch((0,0), (50,55))
 
-    pass
 
 
 

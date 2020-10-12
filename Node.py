@@ -39,6 +39,31 @@ class Node():
         elif abs(self.parent.location[0] - self.location[0]) == 1 or abs(self.parent.location[1] - self.location[1]) == 1:
             return 1
 
+    # transition is combined string of values of the two squares we are currently looking at
+    # direction is 0 for vertical/horizontal and 1 for diagonal
+    def getTransitionCost(self, transition, direction):
+        if transition == '11' or transition == 'a1' or transition == '1a':
+            if direction == 0:
+                return 1
+            if direction == 1:
+                return math.sqrt(2)
+        elif transition == '22' or transition == 'b2' or transition == '2b':
+            if direction == 0:
+                return 2
+            if direction == 1:
+                return math.sqrt(8)
+        elif transition == '21' or transition == '12' or transition == 'b1' or transition == '1b' or transition == 'a2' or transition == '2a':
+            if direction == 0:
+                return 1.5
+            if direction == 1:
+                return math.sqrt(2) * 3 / 2
+        elif transition == 'ab' or transition == 'ba':
+            return .375
+        elif transition == 'aa':
+            return .25
+        elif transition == 'bb':
+            return .5
+
 
     # Using Euclidean Distance
     def calculateEuclideanHeuristic(self, endidx: tuple):
@@ -51,6 +76,19 @@ class Node():
 
         # using the distance formula to calculate the heuristic then taking the floor; idk if we want to floor it or just simply compare the float vals
         return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))
+
+    # Using Manhattan Distance Heuristic
+    def calculateManhattanHeuristic(self, endidx: tuple):
+
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+
+        endRow = endidx[0]
+        endColumn = endidx[1]
+
+        # using the Manhattan distance formula to calculate heuristic
+        return math.fabs(endRow - currentRow) + math.fabs(endColumn - currentColumn)
+
 
     def expandNode(self, open, closed, map):
 

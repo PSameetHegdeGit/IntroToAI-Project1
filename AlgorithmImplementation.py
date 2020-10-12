@@ -88,16 +88,3 @@ if __name__ == "__main__":
 
 
 
-
-"""
-
-Code from Unweighted A*Star:
- for node in open:
-            if node.sumOfHeuristicAndDistanceFromStartToCurrent <= selectedNode.sumOfHeuristicAndDistanceFromStartToCurrent:
-                idxToExpand = idx
-            idx += 1
-
-
-
-
-"""

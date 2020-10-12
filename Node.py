@@ -53,12 +53,14 @@ class Node():
         # using the distance formula to calculate the heuristic then taking the floor; idk if we want to floor it or just simply compare the float vals
         return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))
 
-    def expandNode(self, open, closed):
+    def expandNode(self, open, closed, map):
 
         # Filters by bounds, checks if not in closed list, and if in open list, sets
         def FilterAndTurnIntoNode(expansion: list, open: dict, closed: dict):
 
+            # Remove Blocked values
             expansion = [Node(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
+            expansion = [node for node in expansion if map[node.location[0]][node.location[1]] != 0]
 
             expansion = [node for node in expansion if node.location not in closed]
 

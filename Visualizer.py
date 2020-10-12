@@ -1,5 +1,6 @@
 import pygame, sys
 import constants
+from AlgorithmImplementation import *
 from FormingMap import *
 
 def get_tile_color(tile_contents):
@@ -18,6 +19,10 @@ def get_tile_color(tile_contents):
     # For now lets use 5 to represent the start and end indices
     elif tile_contents == 'c':
         tile_color = constants.GOLD
+
+    # For the optimal path
+    elif tile_contents == 'optimal':
+        tile_color = constants.GREEN
 
 
     return tile_color
@@ -69,9 +74,10 @@ def main():
     instanceOfMap = MapData()
     instanceOfMap.runSuite()
 
-
-
     surface = initialize_game()
+
+
+    UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
     game_loop(surface, instanceOfMap.map)
 

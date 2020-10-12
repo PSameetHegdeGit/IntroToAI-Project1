@@ -17,6 +17,8 @@ class MapData():
     def __init__(self):
         #object lvl fields can be initialized in here
         self.map = []
+        self.startindex = None
+        self.endIndex = None
 
 
 
@@ -25,7 +27,8 @@ class MapData():
         self.generatingHardToTraverseCells()
         self.generateBoostCells()
         self.generateBlockedCells()
-        self.generateStartAndEndIndices()
+
+        self.startindex, self.endIndex = self.generateStartAndEndIndices()
 
     def createDefaultMap(self):
         self.map = [[1 for column in range(constants.NUMBER_OF_BLOCKS_WIDE)]for row in range(constants.NUMBER_OF_BLOCKS_HIGH)]
@@ -107,19 +110,16 @@ class MapData():
 
 
         routeToPerpendicularPaths = {"Up": ["Left", "Right"], "Down": ["Left", "Right"], "Left": ["Up", "Down"], "Right": ["Up", "Down"]}
-        print(sameRoute)
 
         while row >= 0 and row < 120 and column >= 0 and column < 160:
             choice = random.choices(["Same", "Perpendicular"], [0.6, 0.2])[0]
 
             if choice == "Same":
-                print(sameRoute)
                 row, column = self.tryTranslating20Cells(sameRoute, row, column)
 
             elif choice == "Perpendicular":
                 # Choose with equal probability
                 route = random.choices(routeToPerpendicularPaths[sameRoute])[0]
-                print(route)
                 row, column = self.tryTranslating20Cells(route, row, column)
 
                 sameRoute = route

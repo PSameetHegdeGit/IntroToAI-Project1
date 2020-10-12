@@ -19,6 +19,5 @@ GOLD = (153, 153, 0)
 DARKGREEN = (0, 102, 0)
 DARKORANGE = (255, 128, 0)
 
-MAPFILE = "map.txt"
 TITLE = "Welcome to Tile World!"
 FOOD_ENERGY = 10

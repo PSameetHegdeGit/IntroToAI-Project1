@@ -56,17 +56,17 @@ class Node():
     def expandNode(self, open, closed):
 
         # Filters by bounds, checks if not in closed list, and if in open list, sets
-        def FilterAndTurnIntoNode(expansion: list, open: list, closed: list):
+        def FilterAndTurnIntoNode(expansion: list, open: dict, closed: dict):
 
             expansion = [Node(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
 
-            expansion = [node for node in expansion if node not in closed]
+            expansion = [node for node in expansion if node.location not in closed]
 
             for node in expansion:
-                for term in open:
-                    if node == term:
-                        if node.sumOfHeuristicAndDistanceFromStartToCurrent < term.sumOfHeuristicAndDistanceFromStartToCurrent:
-                            term.sumOfHeuristicAndDistanceFromStartToCurrent = node.sumOfHeuristicAndDistanceFromStartToCurrent
+                if node.location in open:
+                    if node.sumOfHeuristicAndDistanceFromStartToCurrent < open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent:
+                            open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent = node.sumOfHeuristicAndDistanceFromStartToCurrent
+                    expansion.remove(node)
 
 
             return expansion

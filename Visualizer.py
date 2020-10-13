@@ -20,6 +20,10 @@ def get_tile_color(tile_contents):
     elif tile_contents == 'c':
         tile_color = constants.GOLD
 
+    # For Nonoptimal paths
+    elif tile_contents == 'searchedbutnotoptimal':
+        tile_color = 'RED'
+
     # For the optimal path
     elif tile_contents == 'optimal':
         tile_color = constants.GREEN
@@ -78,8 +82,8 @@ def main():
 
 
     # UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
-    WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
-
+    # WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+    UniformCost(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
     game_loop(surface, instanceOfMap.map)
 

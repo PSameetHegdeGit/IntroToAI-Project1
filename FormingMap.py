@@ -25,7 +25,8 @@ class MapData():
     def runSuite(self):
         self.createDefaultMap()
         self.generatingHardToTraverseCells()
-        self.generateBoostCells()
+        for i in range(4):
+            self.generateBoostCells()
         self.generateBlockedCells()
 
         self.startindex, self.endIndex = self.generateStartAndEndIndices()
@@ -111,7 +112,7 @@ class MapData():
 
         routeToPerpendicularPaths = {"Up": ["Left", "Right"], "Down": ["Left", "Right"], "Left": ["Up", "Down"], "Right": ["Up", "Down"]}
 
-        while row >= 0 and row < 120 and column >= 0 and column < 160:
+        while row > 0 and row < 119 and column > 0 and column < 159:
             choice = random.choices(["Same", "Perpendicular"], [0.6, 0.2])[0]
 
             if choice == "Same":
@@ -207,16 +208,6 @@ class MapData():
         print(startidx, endidx)
 
         return startidx, endidx
-
-
-
-
-
-
-
-
-
-
 
 
 

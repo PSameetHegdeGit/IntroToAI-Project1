@@ -7,7 +7,9 @@ class Node():
 
     weight = 1
 
-    def __init__(self, idx: tuple, endidx: tuple, prt):
+    def __init__(self, idx: tuple, endidx: tuple, prt, isUniformCost=False):
+        self.isUniformCost = isUniformCost
+
         # Current location as a tuple
         self.location = idx
         self.endidx = endidx
@@ -19,8 +21,8 @@ class Node():
             self.distanceFromStartToCurrent = prt.distanceFromStartToCurrent + self.calculateDistanceFromParentToCurrent()
 
         # when weight is one we're performing a unweighted search, when weight > 1 we are performing a weighted search
-        self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.weight * self.calculateEuclideanHeuristic(self.endidx)
-
+        if not isUniformCost:
+            self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.weight * self.calculateEuclideanHeuristic(self.endidx)
 
     def __eq__(self, other):
         if isinstance(other, Node):
@@ -89,37 +91,33 @@ class Node():
         # using the Manhattan distance formula to calculate heuristic
         return math.fabs(endRow - currentRow) + math.fabs(endColumn - currentColumn)
 
+    # Filters by bounds, checks if not in closed list, and if in open list, sets
+    def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
 
-    def expandNode(self, open, closed, map):
+        # Remove Blocked values
+        expansion = [Node(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
+        expansion = [node for node in expansion if mapToSearch[node.location[0]][node.location[1]] != 0]
 
-        # Filters by bounds, checks if not in closed list, and if in open list, sets
-        def FilterAndTurnIntoNode(expansion: list, open: dict, closed: dict):
+        expansion = [node for node in expansion if node.location not in closed]
 
-            # Remove Blocked values
-            expansion = [Node(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
-            expansion = [node for node in expansion if map[node.location[0]][node.location[1]] != 0]
+        for node in expansion:
+            if node.location in open:
+                if node.sumOfHeuristicAndDistanceFromStartToCurrent < open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent:
+                    open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent = node.sumOfHeuristicAndDistanceFromStartToCurrent
+                expansion.remove(node)
 
-            expansion = [node for node in expansion if node.location not in closed]
+        return expansion
 
-            for node in expansion:
-                if node.location in open:
-                    if node.sumOfHeuristicAndDistanceFromStartToCurrent < open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent:
-                            open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent = node.sumOfHeuristicAndDistanceFromStartToCurrent
-                    expansion.remove(node)
-
-
-            return expansion
-
+    def expandNode(self, open, closed, mapToSearch):
 
         currentRow = self.location[0]
         currentColumn = self.location[1]
-
 
         # This expansion definitely can be condensed
         expansion = [(currentRow - 1, currentColumn), (currentRow + 1, currentColumn), (currentRow, currentColumn - 1), (currentRow, currentColumn + 1),
                 (currentRow - 1, currentColumn - 1), (currentRow - 1, currentColumn + 1), (currentRow + 1, currentColumn + 1), (currentRow + 1, currentColumn - 1)]
 
-        return FilterAndTurnIntoNode(expansion, open, closed)
+        return self.FilterAndTurnIntoNode(expansion, open, closed, mapToSearch)
 
 
 
@@ -127,8 +125,27 @@ class Node():
 
 class UniformCostNode(Node):
 
-    def __init__(self):
-        pass
+    def __init__(self, idx: tuple, endidx: tuple, prt, isUniformCost=True):
+        super().__init__(idx, endidx, prt, isUniformCost)
+
+        # Filters by bounds, checks if not in closed list, and if in open list, sets
+
+    def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
+
+        # Remove Blocked values
+        expansion = [UniformCostNode(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
+        expansion = [node for node in expansion if mapToSearch[node.location[0]][node.location[1]] != 0]
+
+        expansion = [node for node in expansion if node.location not in closed]
+
+        for node in expansion:
+            if node.location in open:
+                if node.distanceFromStartToCurrent < open[node.location].distanceFromStartToCurrent:
+                    open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent = node.distanceFromStartToCurrent
+                expansion.remove(node)
+
+        return expansion
+
 
 
 

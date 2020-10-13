@@ -1,6 +1,6 @@
 import math
 import constants
-from MinHeap import MinHeap
+from MinHeap import *
 from Node import *
 
 
@@ -16,8 +16,31 @@ def backtrack(node: Node, startidx: tuple, mapToSearch):
 
 
 
-def UniformCost(startidx, endidx):
-    pass
+def UniformCost(startidx, endidx, mapToSearch):
+    # Selected Node will be initialized to the start node
+    selectedNode = UniformCostNode(startidx, endidx, None)
+
+    # Open is a Min. Heap
+    open = MinHeapForUniform()
+
+    # Using dictionary instead of array to improve search time; having a separate heap and openindices
+    openIndices = {}
+    closed = {}
+
+    # TODO: ALSO NEVER CHECKED IF CELL IS BLOCKED
+    while selectedNode.location != endidx:
+
+        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
+
+        for node in expansion:
+            open.insert(node)
+            openIndices[node.location] = node
+
+        selectedNode = open.minheap[0]
+        open.remove()
+        closed[selectedNode.location] = selectedNode
+
+    print(backtrack(selectedNode, startidx, mapToSearch))
 
 
 

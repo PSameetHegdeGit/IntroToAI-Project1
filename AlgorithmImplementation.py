@@ -18,7 +18,7 @@ def backtrack(node: Node, startidx: tuple, mapToSearch):
 
 def UniformCost(startidx, endidx, mapToSearch):
     # Selected Node will be initialized to the start node
-    selectedNode = UniformCostNode(startidx, endidx, None)
+    selectedNode = UniformCostNode(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
     # Open is a Min. Heap
     open = MinHeapForUniform()
@@ -49,7 +49,7 @@ def UniformCost(startidx, endidx, mapToSearch):
 def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 
     # Selected Node will be initialized to the start node
-    selectedNode = Node(startidx, endidx, None)
+    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
     # Open is a Min. Heap
     open = MinHeap()
@@ -77,7 +77,7 @@ def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 # Exactly the same as unweighted Astar but we set the value of weight > 1
 def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
     # Selected Node will be initialized to the start node
-    selectedNode = Node(startidx, endidx, None)
+    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
     selectedNode.weight = weight
 
     # Open is a Min. Heap

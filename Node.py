@@ -7,14 +7,12 @@ class Node():
 
     weight = 1
 
-    def __init__(self, idx: tuple, endidx: tuple, prt, isUniformCost=False):
-        self.isUniformCost = isUniformCost
-
-        # Current location as a tuple
+    def __init__(self, idx: tuple, endidx: tuple, prt, valAtIdx, isUniformCost=False):
         self.location = idx
         self.endidx = endidx
-        # Parent that we took to arrive at current location
         self.parent = prt
+        self.valAtIdx = valAtIdx
+
         if prt == None:
             self.distanceFromStartToCurrent = 0
         else:
@@ -31,15 +29,19 @@ class Node():
         return False
 
 
-
-
-    # TODO: Need to modify this code for a weighted search
     def calculateDistanceFromParentToCurrent(self):
+
+        transition = str(self.parent.valAtIdx) + str(self.valAtIdx)
+        direction = None
+
+        print(transition)
         # For Unweighted search
         if abs(self.parent.location[0] - self.location[0]) == 1 and abs(self.parent.location[1] - self.location[1]) == 1:
-            return math.sqrt(2)
+            direction = 1
         elif abs(self.parent.location[0] - self.location[0]) == 1 or abs(self.parent.location[1] - self.location[1]) == 1:
-            return 1
+            direction = 0
+
+        return self.getTransitionCost(transition, direction)
 
     # transition is combined string of values of the two squares we are currently looking at
     # direction is 0 for vertical/horizontal and 1 for diagonal
@@ -95,7 +97,7 @@ class Node():
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
 
         # Remove Blocked values
-        expansion = [Node(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
+        expansion = [Node(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
         expansion = [node for node in expansion if mapToSearch[node.location[0]][node.location[1]] != 0]
 
         expansion = [node for node in expansion if node.location not in closed]
@@ -133,7 +135,7 @@ class UniformCostNode(Node):
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
 
         # Remove Blocked values
-        expansion = [UniformCostNode(idx, self.endidx, self) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
+        expansion = [UniformCostNode(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
         expansion = [node for node in expansion if mapToSearch[node.location[0]][node.location[1]] != 0]
 
         expansion = [node for node in expansion if node.location not in closed]

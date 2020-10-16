@@ -5,24 +5,23 @@ class MinHeap():
 
     minheap = []
 
-    def heapify(self, idx):
-        prtIdx = int((idx - 1) / 2) if idx % 2 != 0 else int((idx - 2) / 2)
+    def sift_up(self, idx):
 
-        if self.minheap[prtIdx].sumOfHeuristicAndDistanceFromStartToCurrent < self.minheap[idx].sumOfHeuristicAndDistanceFromStartToCurrent:
-            self.swap(prtIdx, idx)
-            self.heapify(prtIdx)
+        while idx // 2 > 0:
+            if self.minheap[idx].sumOfHeuristicAndDistanceFromStartToCurrent < self.minheap[idx // 2].sumOfHeuristicAndDistanceFromStartToCurrent:
+                self.minheap[idx // 2], self.minheap[idx] = self.minheap[idx], self.minheap[idx // 2]
 
-        return
+            idx = idx // 2
 
-    def readjustMinHeapAfterDeletion(self, idx):
+
+    def sift_down(self, idx):
         child1 = idx * 2 + 1
         child2 = idx * 2 + 2
 
         try:
-            greaterChild = child1 if self.minheap[child1].sumOfHeuristicAndDistanceFromStartToCurrent <= self.minheap[
-                child2].sumOfHeuristicAndDistanceFromStartToCurrent else child2
+            greaterChild = child1 if self.minheap[child1].sumOfHeuristicAndDistanceFromStartToCurrent <= self.minheap[child2].sumOfHeuristicAndDistanceFromStartToCurrent else child2
             self.swap(idx, greaterChild)
-            self.readjustMinHeapAfterDeletion(greaterChild)
+            self.sift_down(greaterChild)
 
         # Index out of bounds error
         except IndexError:
@@ -39,14 +38,14 @@ class MinHeap():
 
         self.minheap.append(state)
         if len(self.minheap) > 1:
-            self.heapify(len(self.minheap) - 1)
+            self.sift_up(len(self.minheap) - 1)
 
     def remove(self):
 
         if len(self.minheap) > 0:
             self.swap(0, len(self.minheap) - 1)
             self.minheap.pop()
-            self.readjustMinHeapAfterDeletion(0)
+            self.sift_down(0)
         else:
             print("Heap is Empty!")
 
@@ -55,7 +54,7 @@ class MinHeapForUniform(MinHeap):
 
 
     def heapify(self, idx):
-        prtIdx = int((idx - 1) / 2) if idx % 2 != 0 else int((idx - 2) / 2)
+        prtIdx = int(idx // 2)
 
         if self.minheap[prtIdx].distanceFromStartToCurrent < self.minheap[idx].distanceFromStartToCurrent:
             self.swap(prtIdx, idx)

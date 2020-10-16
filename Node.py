@@ -34,12 +34,11 @@ class Node():
         transition = str(self.parent.valAtIdx) + str(self.valAtIdx)
         direction = None
 
-        print(transition)
         # For Unweighted search
         if abs(self.parent.location[0] - self.location[0]) == 1 and abs(self.parent.location[1] - self.location[1]) == 1:
-            direction = 1
+            direction =  0
         elif abs(self.parent.location[0] - self.location[0]) == 1 or abs(self.parent.location[1] - self.location[1]) == 1:
-            direction = 0
+            direction  = 1
 
         return self.getTransitionCost(transition, direction)
 
@@ -97,8 +96,7 @@ class Node():
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
 
         # Remove Blocked values
-        expansion = [Node(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
-        expansion = [node for node in expansion if mapToSearch[node.location[0]][node.location[1]] != 0]
+        expansion = [Node(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
 
         expansion = [node for node in expansion if node.location not in closed]
 
@@ -143,7 +141,7 @@ class UniformCostNode(Node):
         for node in expansion:
             if node.location in open:
                 if node.distanceFromStartToCurrent < open[node.location].distanceFromStartToCurrent:
-                    open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent = node.distanceFromStartToCurrent
+                    open[node.location].distanceFromStartToCurrent = node.distanceFromStartToCurrent
                 expansion.remove(node)
 
         return expansion

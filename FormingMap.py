@@ -196,14 +196,12 @@ class MapData():
         chosenRegion = random.choice(list(mappingChosenRegionToTuple.keys()))
         startidx = mappingChosenRegionToTuple[chosenRegion]
 
-        self.map[startidx[0]][startidx[1]] = 'c'
 
         del mappingChosenRegionToTuple[chosenRegion]
 
         chosenRegion = random.choice(list(mappingChosenRegionToTuple.keys()))
 
         endidx = mappingChosenRegionToTuple[chosenRegion]
-        self.map[endidx[0]][endidx[1]] = 'c'
 
         print(startidx, endidx)
 

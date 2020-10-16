@@ -3,7 +3,7 @@ import time
 
 def lookup(mapToSearch):
 
-    time.sleep(4)
+    time.sleep(6)
 
     while(True):
         try:

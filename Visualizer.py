@@ -2,6 +2,8 @@ import pygame, sys
 import constants
 from AlgorithmImplementation import *
 from FormingMap import *
+import threading
+from Lookup import lookup
 
 def get_tile_color(tile_contents):
 
@@ -73,17 +75,25 @@ def read_map(mapfile):
     world_map = [line.strip() for line in world_map]
     return (world_map)
 
+
+# on Main thread, the pygame visualizaiton will run; on worker thread, a tkinter box will output val for index searched
 def main():
+
     # world_map = read_map(constants.MAPFILE)
     instanceOfMap = MapData()
     instanceOfMap.runSuite()
+
+    threadmanaginglookup = threading.Thread(target=lookup, args=(instanceOfMap.map,), daemon=True)
+
+    threadmanaginglookup.start()
+
 
     surface = initialize_game()
 
 
     # UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
-    # WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
-    UniformCost(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
+    WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+    # UniformCost(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
     game_loop(surface, instanceOfMap.map)
 

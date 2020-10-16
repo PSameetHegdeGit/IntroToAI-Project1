@@ -82,8 +82,9 @@ def main():
     # world_map = read_map(constants.MAPFILE)
     instanceOfMap = MapData()
     instanceOfMap.runSuite()
+    open, closed = UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
-    threadmanaginglookup = threading.Thread(target=lookup, args=(instanceOfMap.map,), daemon=True)
+    threadmanaginglookup = threading.Thread(target=lookup, args=(instanceOfMap.map, open, closed, ), daemon=True)
 
     threadmanaginglookup.start()
 
@@ -91,8 +92,7 @@ def main():
     surface = initialize_game()
 
 
-    # UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
-    WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+    # WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
     # UniformCost(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
     game_loop(surface, instanceOfMap.map)

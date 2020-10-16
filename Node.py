@@ -36,9 +36,9 @@ class Node():
 
         # For Unweighted search
         if abs(self.parent.location[0] - self.location[0]) == 1 and abs(self.parent.location[1] - self.location[1]) == 1:
-            direction =  0
+            direction = 1
         elif abs(self.parent.location[0] - self.location[0]) == 1 or abs(self.parent.location[1] - self.location[1]) == 1:
-            direction  = 1
+            direction = 0
 
         return self.getTransitionCost(transition, direction)
 
@@ -78,7 +78,7 @@ class Node():
         endColumn = endidx[1]
 
         # using the distance formula to calculate the heuristic then taking the floor; idk if we want to floor it or just simply compare the float vals
-        return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))
+        return math.floor(math.sqrt((endRow - currentRow)**2 + (endColumn - currentColumn)**2))/4
 
     # Using Manhattan Distance Heuristic
     def calculateManhattanHeuristic(self, endidx: tuple):
@@ -90,7 +90,7 @@ class Node():
         endColumn = endidx[1]
 
         # using the Manhattan distance formula to calculate heuristic
-        return math.fabs(endRow - currentRow) + math.fabs(endColumn - currentColumn)
+        return abs(endRow - currentRow) + abs(endColumn - currentColumn)
 
     # Filters by bounds, checks if not in closed list, and if in open list, sets
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):

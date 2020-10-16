@@ -41,6 +41,7 @@ def UniformCost(startidx, endidx, mapToSearch):
         closed[selectedNode.location] = selectedNode
 
     print(backtrack(selectedNode, startidx, mapToSearch))
+    return openIndices, closed
 
 
 
@@ -72,6 +73,8 @@ def UnweightedAstarSearch(startidx, endidx, mapToSearch):
         closed[selectedNode.location] = selectedNode
 
     print(backtrack(selectedNode, startidx, mapToSearch))
+    return openIndices, closed
+
 
 
 # Exactly the same as unweighted Astar but we set the value of weight > 1
@@ -101,6 +104,8 @@ def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
         closed[selectedNode.location] = selectedNode
 
     print(backtrack(selectedNode, startidx, mapToSearch))
+    return openIndices, closed
+
 
 
 if __name__ == "__main__":

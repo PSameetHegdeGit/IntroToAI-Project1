@@ -7,7 +7,7 @@ class Node():
 
     weight = 1
 
-    def __init__(self, idx: tuple, endidx: tuple, prt, valAtIdx, isUniformCost=False):
+    def __init__(self, idx: tuple, endidx: tuple, prt, valAtIdx, isUniformCost=False, isMultiHeuristic = False):
         self.location = idx
         self.endidx = endidx
         self.parent = prt
@@ -17,6 +17,11 @@ class Node():
             self.distanceFromStartToCurrent = 0
         else:
             self.distanceFromStartToCurrent = prt.distanceFromStartToCurrent + self.calculateDistanceFromParentToCurrent()
+
+        if isMultiHeuristic:
+            self.calculateCanberraHeuristic(self.endidx)
+            self.calculateChebyshevHeuristic(self.endidx)
+            self.calculateBrayCurtisHeuristic(self.endidx)
 
         # when weight is one we're performing a unweighted search, when weight > 1 we are performing a weighted search
         if not isUniformCost:
@@ -91,6 +96,44 @@ class Node():
 
         # using the Manhattan distance formula to calculate heuristic
         return abs(endRow - currentRow) + abs(endColumn - currentColumn)
+
+    #Using Canberra Distance
+    def calculateCanberraHeuristic(self, endidx: tuple):
+
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+        print("curr", currentRow, currentColumn)
+
+        endRow = endidx[0]
+        endColumn = endidx[1]
+        print("end", endRow, endColumn)
+
+        # using the Canberra distance formula to calculate heuristic
+        print("Canberra dist", abs(endRow - currentRow)/(abs(currentRow) + abs(endRow)) + abs(endColumn - currentColumn)/(abs(currentColumn) + abs(endColumn)))
+        #return abs(currentRow - endRow)/(abs(currentRow) + abs(endRow)) + abs(currentColumn - endColumn)/(abs(currentColumn) + abs(endColumn))
+
+    def calculateChebyshevHeuristic(self, endidx: tuple):
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+        print("curr", currentRow, currentColumn)
+
+        endRow = endidx[0]
+        endColumn = endidx[1]
+        print("end", endRow, endColumn)
+
+        print("Chebyshev dist", max(abs(endRow - currentRow), abs(endColumn - currentColumn)))
+
+    def calculateBrayCurtisHeuristic(self, endidx: tuple):
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+        print("curr", currentRow, currentColumn)
+
+        endRow = endidx[0]
+        endColumn = endidx[1]
+        print("end", endRow, endColumn)
+
+        print("Bray Curtis dist", (abs(endRow - currentRow) + abs(endColumn - currentColumn))/(abs(endRow + currentRow) + abs(endColumn + currentColumn)))
+
 
     # Filters by bounds, checks if not in closed list, and if in open list, sets
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):

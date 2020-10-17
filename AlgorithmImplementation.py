@@ -106,6 +106,39 @@ def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
     print(backtrack(selectedNode, startidx, mapToSearch))
     return openIndices, closed
 
+def Key(idx, i, open, closed, w1):
+    g_val = 0
+    h_val = 0
+    if idx in open:
+        g_val = open[idx].distanceFromStartToCurrent
+    elif idx in closed:
+        g_val = open[idx].distanceFromStartToCurrent
+
+    if i == 0:
+        h_val = Node.calculateEuclideanHeuristic(Node, idx)
+    elif i == 1:
+        h_val = Node.calculateManhattanHeuristic(Node, idx)
+    elif i == 2:
+        h_val = Node.calculateCanberraHeuristic(Node, idx)
+    elif i == 3:
+        h_val = Node.calculateChebyshevHeuristic(Node, idx)
+    elif i == 4:
+        h_val = Node.calculateBrayCurtisHeuristic(Node, idx)
+
+    return g_val + w1 * h_val
+
+def MultiHeuristicAStar(startidx, endidx, mapToSearch, w1, w2):
+    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)
+
+    open = [MinHeap()] * 5
+
+    openIndices = [{}] * 5
+    closed = [{}] * 5
+
+    for i in range(5):
+        print("open", open[i].minheap)
+        print("open indices", openIndices[i])
+        print("closed", closed[i])
 
 
 if __name__ == "__main__":

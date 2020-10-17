@@ -77,23 +77,38 @@ def read_map(mapfile):
 
 
 # on Main thread, the pygame visualizaiton will run; on worker thread, a tkinter box will output val for index searched
-def main():
 
-    # world_map = read_map(constants.MAPFILE)
-    instanceOfMap = MapData()
-    instanceOfMap.runSuite()
-    open, closed = UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
-    threadmanaginglookup = threading.Thread(target=lookup, args=(instanceOfMap.map, open, closed, ), daemon=True)
+
+def chooseAlgorithm(instanceOfMap):
+
+    algorithmChoice = input("What Algorithm you would like to Implement?\n").lower()
+    open, closed = None, None
+
+    if algorithmChoice == "uniformcostsearch":
+        open, closed = UniformCost(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
+    elif algorithmChoice == "unweightedastarsearch":
+        open, closed = UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
+    elif algorithmChoice == "weightedastarsearch":
+        open, closed = WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+    elif algorithmChoice == "multipleastarsearch":
+        pass
+        # open, closed = WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+
+    threadmanaginglookup = threading.Thread(target=lookup, args=(instanceOfMap.map, open, closed,), daemon=True)
 
     threadmanaginglookup.start()
 
 
+def main():
+
+    # Choosing algorithm
+    instanceOfMap = MapData()
+    instanceOfMap.runSuite()
+
+    chooseAlgorithm(instanceOfMap)
+
     surface = initialize_game()
-
-
-    # WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
-    # UniformCost(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
 
     game_loop(surface, instanceOfMap.map)
 

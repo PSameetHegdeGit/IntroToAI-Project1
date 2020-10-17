@@ -5,7 +5,9 @@ from Node import Node
 
 class MinHeap():
 
-    minheap = []
+    def __init__(self):
+        self.minheap = []
+
 
     def sift_up(self, idx):
 

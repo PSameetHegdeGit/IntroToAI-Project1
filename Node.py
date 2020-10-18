@@ -97,56 +97,35 @@ class Node():
         # using the Manhattan distance formula to calculate heuristic
         return abs(endRow - currentRow) + abs(endColumn - currentColumn)
 
-    #Using Canberra Distance
-    def calculateCanberraHeuristic(self, endidx: tuple):
-
-        currentRow = self.location[0]
-        currentColumn = self.location[1]
-        print("curr", currentRow, currentColumn)
-
-        endRow = endidx[0]
-        endColumn = endidx[1]
-        print("end", endRow, endColumn)
-
-        # using the Canberra distance formula to calculate heuristic
-        print("Canberra dist", abs(endRow - currentRow)/(abs(currentRow) + abs(endRow)) + abs(endColumn - currentColumn)/(abs(currentColumn) + abs(endColumn)))
-        #return abs(currentRow - endRow)/(abs(currentRow) + abs(endRow)) + abs(currentColumn - endColumn)/(abs(currentColumn) + abs(endColumn))
-
     def calculateChebyshevHeuristic(self, endidx: tuple):
         currentRow = self.location[0]
         currentColumn = self.location[1]
-        print("curr", currentRow, currentColumn)
 
         endRow = endidx[0]
         endColumn = endidx[1]
-        print("end", endRow, endColumn)
 
-        print("Chebyshev dist", max(abs(endRow - currentRow), abs(endColumn - currentColumn)))
+        return max(abs(endRow - currentRow), abs(endColumn - currentColumn))
 
     def calculateOctileHeuristic(self, endidx: tuple):
         currentRow = self.location[0]
         currentColumn = self.location[1]
-        print("curr", currentRow, currentColumn)
 
         endRow = endidx[0]
         endColumn = endidx[1]
-        print("end", endRow, endColumn)
 
         dx = abs(currentRow - endRow)
         dy = abs(currentColumn - endColumn)
 
-        print("Octile distance", ((dx + dy) + (math.sqrt(2) - 2) * min(dx, dy))/4)
+        return ((dx + dy) + (math.sqrt(2) - 2) * min(dx, dy))/4
 
     def calculateBrayCurtisHeuristic(self, endidx: tuple):
         currentRow = self.location[0]
         currentColumn = self.location[1]
-        print("curr", currentRow, currentColumn)
 
         endRow = endidx[0]
         endColumn = endidx[1]
-        print("end", endRow, endColumn)
 
-        print("Bray Curtis dist", (abs(endRow - currentRow) + abs(endColumn - currentColumn))/(abs(endRow + currentRow) + abs(endColumn + currentColumn)))
+        return "Bray Curtis dist", (abs(endRow - currentRow) + abs(endColumn - currentColumn))/(abs(endRow + currentRow) + abs(endColumn + currentColumn))
 
 
     # Filters by bounds, checks if not in closed list, and if in open list, sets

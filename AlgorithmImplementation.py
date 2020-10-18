@@ -119,7 +119,7 @@ def Key(idx, i, open, closed, w1):
     elif i == 1:
         h_val = Node.calculateManhattanHeuristic(Node, idx)
     elif i == 2:
-        h_val = Node.calculateCanberraHeuristic(Node, idx)
+        h_val = Node.calculateOctileHeuristic(Node, idx)
     elif i == 3:
         h_val = Node.calculateChebyshevHeuristic(Node, idx)
     elif i == 4:
@@ -127,8 +127,12 @@ def Key(idx, i, open, closed, w1):
 
     return g_val + w1 * h_val
 
+def ExpandState(s, i):
+    pass
+
 def MultiHeuristicAStar(startidx, endidx, mapToSearch, w1, w2):
-    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)
+    selectedNode = [Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)]*5
+    goalNode = [Node(endidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)]*5
 
     open = [MinHeap()] * 5
 
@@ -136,9 +140,36 @@ def MultiHeuristicAStar(startidx, endidx, mapToSearch, w1, w2):
     closed = [{}] * 5
 
     for i in range(5):
-        print("open", open[i].minheap)
-        print("open indices", openIndices[i])
-        print("closed", closed[i])
+        selectedNode[i].distanceFromStartToCurrent = 0
+        goalNode[i].distanceFromStartToCurrent = float('inf')
+        selectedNode[i].backpointer = None
+        goalNode[i].backpointer = None
+        open[i].insert(selectedNode)
+        openIndices[i][selectedNode.location] = selectedNode
+        Keys = [[]] * 5
+        for node in open[0]:
+            Keys[0].append(Key(node, 0, open, closed, w1))
+    while min(Keys[0]) < float('inf'):
+        for i in range(1, 5):
+            for node in open[i]:
+                Keys[i].append(Key(node, i, open, closed, w1))
+            if min(Keys[i]) <= w2 * min(Keys[0]):
+                if goalNode[i].distanceFromStartToCurrent <= min(Keys[i]):
+                    if goalNode[i].distanceFromStartToCurrent <= float('inf'):
+                        return goalNode[i].backpointer
+                else:
+                    # s<-Open_i.Top()
+                    ExpandState(selectedNode, i)
+                    closed[i][selectedNode.location] = selectedNode
+            else:
+                if goalNode[0].distanceFromStartToCurrent <= min(Keys[0]):
+                    if goalNode[0].distanceFromStartToCurrent <= float('inf'):
+                        return goalNode[0].backpointer
+                else:
+                    # s<-Open_i.Top()
+                    ExpandState(selectedNode, i)
+                    closed[0][selectedNode.location] = selectedNode
+
 
 
 if __name__ == "__main__":

@@ -184,24 +184,37 @@ class MapData():
                 self.map[idx[0]][idx[1]] = 0
 
 
+
+    def generateTuple(self, region, idx):
+
+        while idx is None or self.map[idx[0]][idx[1]] == 0:
+            if region == 'TOP':
+                idx = (random.randrange(0,19), random.randrange(0, 160))
+            elif region  == 'BOTTOM':
+                idx = (random.randrange(99, 120), random.randrange(0, 160))
+            elif region == 'LEFT':
+                idx = (random.randrange(0, 120), random.randrange(0,20))
+            elif region == 'RIGHT':
+                idx = (random.randrange(0, 120), random.randrange(139, 160))
+
+        return idx
+
+
+
+
     def generateStartAndEndIndices(self):
 
-        mappingChosenRegionToTuple = {'TOP': (0, random.randrange(0, 160)), 'BOTTOM': (119, random.randrange(0, 160)),
-                        'LEFT': (random.randrange(0, 120), 0), 'RIGHT': (random.randrange(0, 120), 159)
-                       }
 
-        #TODO
-        # DOES NOT CHECK IF PLACING IN BLOCKED REGION -- NEED TO FIGURE OUT HOW TO CALL RANDRANGE ON SUBSEQUENT ITERATIONS
-        # ALSO NEED TO INCLUDE AMONG 20 ROWS or 20 COLUMNS
-        chosenRegion = random.choice(list(mappingChosenRegionToTuple.keys()))
-        startidx = mappingChosenRegionToTuple[chosenRegion]
+        regions = ['TOP', 'BOTTOM', 'LEFT', 'RIGHT']
 
+        startregion = random.choice(regions)
 
-        del mappingChosenRegionToTuple[chosenRegion]
+        regions.remove(startregion)
 
-        chosenRegion = random.choice(list(mappingChosenRegionToTuple.keys()))
+        endregion = random.choice(regions)
 
-        endidx = mappingChosenRegionToTuple[chosenRegion]
+        startidx = self.generateTuple(startregion, None)
+        endidx = self.generateTuple(endregion, None)
 
         print(startidx, endidx)
 

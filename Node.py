@@ -123,6 +123,20 @@ class Node():
 
         print("Chebyshev dist", max(abs(endRow - currentRow), abs(endColumn - currentColumn)))
 
+    def calculateOctileHeuristic(self, endidx: tuple):
+        currentRow = self.location[0]
+        currentColumn = self.location[1]
+        print("curr", currentRow, currentColumn)
+
+        endRow = endidx[0]
+        endColumn = endidx[1]
+        print("end", endRow, endColumn)
+
+        dx = abs(currentRow - endRow)
+        dy = abs(currentColumn - endColumn)
+
+        print("Octile distance", ((dx + dy) + (math.sqrt(2) - 2) * min(dx, dy))/4)
+
     def calculateBrayCurtisHeuristic(self, endidx: tuple):
         currentRow = self.location[0]
         currentColumn = self.location[1]

@@ -88,7 +88,7 @@ def chooseAlgorithm(instanceOfMap):
     elif algorithmChoice == "unweightedastarsearch":
         open, closed = UnweightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map)
     elif algorithmChoice == "weightedastarsearch":
-        weight = int(input("What weight would you like to test with?\n"))
+        weight = float(input("What weight would you like to test with?\n"))
         open, closed = WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, weight)
     elif algorithmChoice == "multipleastarsearch":
         pass

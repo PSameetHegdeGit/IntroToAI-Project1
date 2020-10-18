@@ -5,7 +5,7 @@ import numpy as np
 import random
 import constants
 import math
-
+from helper import *
 
 
 
@@ -17,8 +17,7 @@ class MapData():
     def __init__(self):
         #object lvl fields can be initialized in here
         self.map = []
-        self.startindex = None
-        self.endIndex = None
+        self.hardToTraverseIndices = []
 
 
 
@@ -29,7 +28,6 @@ class MapData():
             self.generateBoostCells()
         self.generateBlockedCells()
 
-        self.startindex, self.endIndex = self.generateStartAndEndIndices()
 
     def createDefaultMap(self):
         self.map = [[1 for column in range(constants.NUMBER_OF_BLOCKS_WIDE)]for row in range(constants.NUMBER_OF_BLOCKS_HIGH)]
@@ -46,127 +44,105 @@ class MapData():
                         self.map[i][j] = random.choice([1,2])
                     else:
                         break
+            self.hardToTraverseIndices.append((x,y))
 
 
     # Noticed bug where path does not extend 20 cells for a single translation
     def generateBoostCells(self):
+
         selections = {"R1": 0, "C1": 0, "R2": 119, "C2": 159}
         sideSelection = random.choices(list(selections.keys()))[0]
+        indicesOfPath = []
 
-        newrow, newcolumn = self.generateBoostCellsInitialStep(sideSelection, selections)
-        self.generateBoostCellsLaterSteps(newrow, newcolumn, sideSelection)
+        while True:
+            try:
+
+                newrow, newcolumn = self.generateBoostCellsInitialStep(sideSelection, selections[sideSelection], indicesOfPath)
+                self.generateBoostCellsLaterSteps(newrow, newcolumn, sideSelection, indicesOfPath)
+
+                  # if count is greater than 100 our highway is valid
+                if len(indicesOfPath) >= 100:
+                    break
+
+            # Raise an exception on collision with an already established path
+            except CollisionError:
+                pass
+
+            self.resetPathValues(indicesOfPath)
+            indicesOfPath.clear()
 
 
-    #TODO: Convert numpy array back to regular 2D array;
-    def generateBoostCellsInitialStep(self, sideSelection, selections):
+    # Function resets the values of path back to one
+    def resetPathValues(self, indicesOfPath):
+        for idx in indicesOfPath:
+            self.map[idx[0]][idx[1]] = 1
+
+
+    def generateBoostCellsInitialStep(self, sideSelection, idxFromSelection, indicesOfPath):
 
         row, column = None, None
-        if(sideSelection == "R1" or sideSelection == "R2"):
-            row, column = (selections[sideSelection], random.randint(0, 159))
-        elif(sideSelection == "C1" or sideSelection == "C2"):
-            row, column = (random.randint(0,119), selections[sideSelection])
+        if sideSelection == "R1" or sideSelection == "R2":
+            row, column = (idxFromSelection, random.randint(0, 159))
+        elif sideSelection == "C1" or sideSelection == "C2":
+            row, column = (random.randint(0,119), idxFromSelection)
+
+        if self.map[row][column] == 'a' or self.map[row][column] == 'b':
+            raise CollisionError()
+
+        if self.map[row][column] == 1:
+            self.map[row][column] = 'a'
+        elif self.map[row][column] == 2:
+            self.map[row][column] = 'b'
+
+        indicesOfPath.append((row,column))
 
 
-        if(sideSelection == "R1"):
-            for x in range(row, row + 20):
-                if self.map[x][column] == 1:
-                    self.map[x][column] = 'a'
-                elif self.map[x][column] == 2:
-                    self.map[x][column] = 'b'
-
-                row = x
-
-        elif (sideSelection == "R2"):
-            for x in range(row, row - 20, -1):
-                if self.map[x][column] == 1:
-                    self.map[x][column] = 'a'
-                elif self.map[x][column] == 2:
-                    self.map[x][column] = 'b'
-
-                row = x
-        elif(sideSelection == "C1"):
-            for y in range(column, column + 20):
-                if self.map[row][y] == 1:
-                    self.map[row][y] = 'a'
-                elif self.map[row][y] == 2:
-                    self.map[row][y] = 'b'
-
-                column = y
-        elif(sideSelection == "C2"):
-            for y in range(column, column - 20, -1):
-                if self.map[row][y] == 1:
-                    self.map[row][y] = 'a'
-                elif self.map[row][y] == 2:
-                    self.map[row][y] = 'b'
-
-                column = y
-
+        if sideSelection == "R1":
+            row, column = Down(self.map, row, column, indicesOfPath)
+        elif sideSelection == "R2":
+            row, column = Up(self.map, row, column, indicesOfPath)
+        elif sideSelection == "C1":
+            row, column = Right(self.map, row, column, indicesOfPath)
+        elif sideSelection == "C2":
+            row, column = Left(self.map, row, column, indicesOfPath)
 
         return row, column
 
-    def generateBoostCellsLaterSteps(self, row, column, sideSelection):
+    def generateBoostCellsLaterSteps(self, row, column, sideSelection, indicesOfPath):
 
         sideSelectionToRoute = {"R1": "Down", "R2": "Up", "C1": "Right", "C2": "Left"}
-        sameRoute = sideSelectionToRoute[sideSelection]
-
-
+        route = sideSelectionToRoute[sideSelection]
         routeToPerpendicularPaths = {"Up": ["Left", "Right"], "Down": ["Left", "Right"], "Left": ["Up", "Down"], "Right": ["Up", "Down"]}
 
         while row > 0 and row < 119 and column > 0 and column < 159:
-            choice = random.choices(["Same", "Perpendicular"], [0.6, 0.2])[0]
+            choice = random.choices(["Same", "Perpendicular"], [0.6, 0.4])[0]
+
+            # choice = "Same"
 
             if choice == "Same":
-                row, column = self.tryTranslating20Cells(sameRoute, row, column)
+                row, column = self.translate20Cells(route, row, column, indicesOfPath)
+
 
             elif choice == "Perpendicular":
                 # Choose with equal probability
-                route = random.choices(routeToPerpendicularPaths[sameRoute])[0]
-                row, column = self.tryTranslating20Cells(route, row, column)
-
-                sameRoute = route
+                route = random.choices(routeToPerpendicularPaths[route])[0]
+                row, column = self.translate20Cells(route, row, column, indicesOfPath)
 
 
 
 
 
     # Given a particular direction move by 20 -- NEEDS TO BE MODIFIED
-    def tryTranslating20Cells(self, route, row, column):
-        try:
-            if route == "Up":
-                for x in range(row, row - 20, -1):
-                    if self.map[x][column] == 1:
-                        self.map[x][column] = 'a'
-                    elif self.map[x][column] == 2:
-                        self.map[x][column] = 'b'
+    def translate20Cells(self, route, row, column, indicesOfPath):
 
-                    row = x
-            elif route == "Down":
-                for x in range(row, row + 20):
-                    if self.map[x][column] == 1:
-                        self.map[x][column] = 'a'
-                    elif self.map[x][column] == 2:
-                        self.map[x][column] = 'b'
-
-                    row = x
-            elif route == "Left":
-                for y in range(column, column - 20, -1):
-                    if self.map[row][y] == 1:
-                        self.map[row][y] = 'a'
-                    elif self.map[row][y] == 2:
-                        self.map[row][y] = 'b'
-
-                    column = y
-            elif route == "Right":
-                for y in range(column, column + 20):
-                    if self.map[row][y] == 1:
-                        self.map[row][y] = 'a'
-                    elif self.map[row][y] == 2:
-                        self.map[row][y] = 'b'
-
-                    column = y
-
-        except:
-            pass
+        if route == "Up":
+            row, column = Up(self.map, row, column, indicesOfPath)
+        elif route == "Down":
+            row, column = Down(self.map, row, column, indicesOfPath)
+        elif route == "Left":
+            row, column = Left(self.map, row, column, indicesOfPath)
+        elif route == "Right":
+            row, column = Right(self.map, row, column, indicesOfPath)
 
         return row, column
 
@@ -224,9 +200,6 @@ class MapData():
 
 
 
-
-
-
 if __name__ == "__main__":
     testMap = MapData()
     testMap.createDefaultMap()
@@ -234,6 +207,7 @@ if __name__ == "__main__":
     testMap.generateBoostCells()
     testMap.generateBlockedCells()
     testMap.generateStartAndEndIndices()
+    print(testMap.map)
 
 
 

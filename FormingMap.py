@@ -8,8 +8,6 @@ import math
 from helper import *
 
 
-
-
 # May want to make this into a class or just a list of methods (idk which would be better)
 class MapData():
 
@@ -192,7 +190,6 @@ class MapData():
         startidx = self.generateTuple(startregion, None)
         endidx = self.generateTuple(endregion, None)
 
-        print(startidx, endidx)
 
         return startidx, endidx
 

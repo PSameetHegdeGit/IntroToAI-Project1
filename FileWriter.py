@@ -1,6 +1,6 @@
 class FileWriter:
-    def __init__(self, start, end, hardTraverse, completeGrid):
-        f = open("demofile.txt", "a")
+    def __init__(self, start, end, hardTraverse, completeGrid, path):
+        f = open(path, "a")
         f.write(self.arrayToString(start))
         f.write(self.arrayToString(end))
         for coord in hardTraverse:
@@ -8,8 +8,6 @@ class FileWriter:
         for row in completeGrid:
             f.write("".join(row) + "\n")
         f.close()
-        fr = open("demofile.txt", "r")
-        print(fr.readlines())
 
     def arrayToString(self, list):
         return str(list[0]) + " " + str(list[1]) + "\n"

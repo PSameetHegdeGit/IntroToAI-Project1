@@ -3,7 +3,6 @@ import constants
 from MinHeap import *
 from Node import *
 
-
 def backtrack(node: Node, startidx: tuple, mapToSearch):
 
     #Recursively call backtrack until we reach a node with start idx
@@ -13,7 +12,13 @@ def backtrack(node: Node, startidx: tuple, mapToSearch):
     mapToSearch[node.location[0]][node.location[1]] = 'optimal'
     return f"{node.location} {backtrack(node.parent, startidx, mapToSearch)}"
 
+@staticmethod
+def backtrackTesting(node: Node, startidx: tuple, mapToSearch):
 
+    #Recursively call backtrack until we reach a node with start idx
+    if node.location == startidx:
+        return 1
+    return 1 + backtrackTesting(node.parent, startidx, mapToSearch)
 
 
 def UniformCost(startidx, endidx, mapToSearch):

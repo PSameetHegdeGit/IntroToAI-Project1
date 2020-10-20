@@ -1,9 +1,9 @@
 class FileReader:
     def __init__(self):
         self.readFile()
-
-    def readFile(self):
-        f = open("demofile.txt", "r")
+    @staticmethod
+    def readFile(filename):
+        f = open("./Maps/"+filename, "r")
         sstart = list(map(int, str.split(f.readline())))
         sgoal = list(map(int, str.split(f.readline())))
         hardTraverse = []

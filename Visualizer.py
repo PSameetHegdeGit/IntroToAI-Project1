@@ -145,7 +145,7 @@ def testSuite():
 
 def main():
 
-    # # Choosing algorithm
+    # Choosing algorithm
     # instanceOfMap = MapData()
     # instanceOfMap.runSuite()
     # startidx, endidx = instanceOfMap.generateStartAndEndIndices()

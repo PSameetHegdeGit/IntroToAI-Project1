@@ -57,23 +57,24 @@ class MinHeap():
 class MinHeapForUniform(MinHeap):
 
 
-    def heapify(self, idx):
-        prtIdx = int(idx // 2)
+    def sift_up(self, idx):
 
-        if self.minheap[prtIdx].distanceFromStartToCurrent < self.minheap[idx].distanceFromStartToCurrent:
-            self.swap(prtIdx, idx)
-            self.heapify(prtIdx)
+        while idx // 2 > 0:
+            if self.minheap[idx].distanceFromStartToCurrent < self.minheap[idx // 2].distanceFromStartToCurrent :
+                self.minheap[idx // 2], self.minheap[idx] = self.minheap[idx], self.minheap[idx // 2]
+
+            idx = idx // 2
 
         return
 
-    def readjustMinHeapAfterDeletion(self, idx):
+    def sift_down(self, idx):
         child1 = idx * 2 + 1
         child2 = idx * 2 + 2
 
         try:
             greaterChild = child1 if self.minheap[child1].distanceFromStartToCurrent <= self.minheap[child2].distanceFromStartToCurrent else child2
             self.swap(idx, greaterChild)
-            self.readjustMinHeapAfterDeletion(greaterChild)
+            self.sift_down(greaterChild)
 
         # Index out of bounds error
         except IndexError:

@@ -7,13 +7,13 @@ class Node():
 
     weight = 1
 
-    def __init__(self, idx: tuple, endidx: tuple, prt, valAtIdx, isUniformCost=False, isMultiHeuristic = False):
+    def __init__(self, idx, endidx, prt, valAtIdx, isUniformCost=False, isMultiHeuristic = False):
         self.location = idx
         self.endidx = endidx
         self.parent = prt
         self.valAtIdx = valAtIdx
 
-        if prt == None:
+        if prt is None:
             self.distanceFromStartToCurrent = 0
         else:
             self.distanceFromStartToCurrent = prt.distanceFromStartToCurrent + self.calculateDistanceFromParentToCurrent()
@@ -37,6 +37,7 @@ class Node():
     def calculateDistanceFromParentToCurrent(self):
 
         transition = str(self.parent.valAtIdx) + str(self.valAtIdx)
+        print(transition)
         direction = None
 
         # For Unweighted search
@@ -130,7 +131,7 @@ class Node():
 
     # Filters by bounds, checks if not in closed list, and if in open list, sets
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
-
+        print(expansion)
         # Remove Blocked values
         expansion = [Node(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
 
@@ -161,16 +162,14 @@ class Node():
 
 class UniformCostNode(Node):
 
-    def __init__(self, idx: tuple, endidx: tuple, prt, isUniformCost=True):
-        super().__init__(idx, endidx, prt, isUniformCost)
+    def __init__(self, idx, endidx, prt, valAtIdx, isUniformCost=True):
+        super().__init__(idx, endidx, prt, valAtIdx, isUniformCost)
 
         # Filters by bounds, checks if not in closed list, and if in open list, sets
 
     def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
-
         # Remove Blocked values
-        expansion = [UniformCostNode(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160]
-        expansion = [node for node in expansion if mapToSearch[node.location[0]][node.location[1]] != 0]
+        expansion = [UniformCostNode(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
 
         expansion = [node for node in expansion if node.location not in closed]
 
@@ -182,7 +181,9 @@ class UniformCostNode(Node):
 
         return expansion
 
+if __name__ == "__main__":
 
+    print('0' == 0)
 
 
 

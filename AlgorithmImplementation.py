@@ -32,7 +32,6 @@ def UniformCost(startidx, endidx, mapToSearch):
     openIndices = {}
     closed = {}
 
-    # TODO: ALSO NEVER CHECKED IF CELL IS BLOCKED
     while selectedNode.location != endidx:
 
         expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
@@ -64,7 +63,6 @@ def UnweightedAstarSearch(startidx, endidx, mapToSearch):
     openIndices = {}
     closed = {}
 
-    # TODO: ALSO NEVER CHECKED IF CELL IS BLOCKED
     while selectedNode.location != endidx:
 
         expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
@@ -95,7 +93,6 @@ def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
     openIndices = {}
     closed = {}
 
-    # TODO: ALSO NEVER CHECKED IF CELL IS BLOCKED
     while selectedNode.location != endidx:
 
         expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)

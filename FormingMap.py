@@ -20,6 +20,7 @@ class MapData():
 
 
     def runSuite(self):
+
         self.createDefaultMap()
         self.generatingHardToTraverseCells()
         for i in range(4):
@@ -161,15 +162,22 @@ class MapData():
 
     def generateTuple(self, region, idx):
 
+
         while idx is None or self.map[idx[0]][idx[1]] == 0:
+            print(idx)
+            if idx is not None:
+                print(self.map[idx[0]][idx[1]])
             if region == 'TOP':
-                idx = (random.randrange(0,19), random.randrange(0, 160))
+                idx = (random.randrange(0,20), random.randrange(0, 160))
             elif region  == 'BOTTOM':
                 idx = (random.randrange(99, 120), random.randrange(0, 160))
             elif region == 'LEFT':
                 idx = (random.randrange(0, 120), random.randrange(0,20))
             elif region == 'RIGHT':
                 idx = (random.randrange(0, 120), random.randrange(139, 160))
+
+        print(idx)
+        print(self.map[idx[0]][idx[1]])
 
         return idx
 
@@ -199,10 +207,7 @@ class MapData():
 
 if __name__ == "__main__":
     testMap = MapData()
-    testMap.createDefaultMap()
-    testMap.generatingHardToTraverseCells()
-    testMap.generateBoostCells()
-    testMap.generateBlockedCells()
+    testMap.runSuite()
     testMap.generateStartAndEndIndices()
     print(testMap.map)
 

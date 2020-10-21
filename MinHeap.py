@@ -48,8 +48,9 @@ class MinHeap():
 
         if len(self.minheap) > 0:
             self.swap(0, len(self.minheap) - 1)
-            self.minheap.pop()
+            node = self.minheap.pop()
             self.sift_down(0)
+            return node
         else:
             print("Heap is Empty!")
 
@@ -79,8 +80,3 @@ class MinHeapForUniform(MinHeap):
         # Index out of bounds error
         except IndexError:
             return
-
-
-
-
-

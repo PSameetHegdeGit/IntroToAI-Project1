@@ -16,11 +16,11 @@ def GenerateMaps(noOfMaps, noOfStartAndEndIdx):
         ReadyMapForWrite(instanceOfMap.map)
         for j in range(noOfStartAndEndIdx):
             start, end = instanceOfMap.generateStartAndEndIndices()
-            FileWriter(start, end, instanceOfMap.hardToTraverseIndices, instanceOfMap.map, f"Maps/map_{i}_{j}.txt")
+            FileWriter(start, end, instanceOfMap.hardToTraverseIndices, instanceOfMap.map, f"Maps/map_{4}_{j}.txt")
 
 
 if __name__ == "__main__":
-    GenerateMaps(5, 10)
+    GenerateMaps(1, 10)
 
 
 

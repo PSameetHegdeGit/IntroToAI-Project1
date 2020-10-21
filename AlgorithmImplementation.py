@@ -5,6 +5,7 @@ from Node import *
 
 def backtrack(node: Node, startidx: tuple, mapToSearch):
 
+
     #Recursively call backtrack until we reach a node with start idx
     if node.location == startidx:
         mapToSearch[node.location[0]][node.location[1]] = 'optimal'
@@ -12,7 +13,6 @@ def backtrack(node: Node, startidx: tuple, mapToSearch):
     mapToSearch[node.location[0]][node.location[1]] = 'optimal'
     return f"{node.location} {backtrack(node.parent, startidx, mapToSearch)}"
 
-@staticmethod
 def backtrackTesting(node: Node, startidx: tuple, mapToSearch):
 
     #Recursively call backtrack until we reach a node with start idx
@@ -22,6 +22,7 @@ def backtrackTesting(node: Node, startidx: tuple, mapToSearch):
 
 
 def UniformCost(startidx, endidx, mapToSearch):
+
     # Selected Node will be initialized to the start node
     selectedNode = UniformCostNode(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
@@ -34,25 +35,39 @@ def UniformCost(startidx, endidx, mapToSearch):
 
     while selectedNode.location != endidx:
 
-        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
+        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
 
         for node in expansion:
             open.insert(node)
             openIndices[node.location] = node
 
-        selectedNode = open.minheap[0]
-        open.remove()
+        selectedNode = open.remove()
+
+        # print(open.minheap)
+        # print(openIndices[selectedNode.location])
+        try:
+            openIndices.pop(selectedNode.location)
+        except:
+            pass
+
+
+        if len(openIndices) == 0:
+            print("Sorry unreachable!")
+            return openIndices, closed
+
         closed[selectedNode.location] = selectedNode
 
+    # print(len(open.minheap))
+    # print(len(openIndices))
     print(backtrack(selectedNode, startidx, mapToSearch))
     return openIndices, closed
-
 
 
 
 # TODO: Need to modify this code for weighted search
 def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 
+
     # Selected Node will be initialized to the start node
     selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
@@ -65,26 +80,32 @@ def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 
     while selectedNode.location != endidx:
 
-        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
+        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
 
         for node in expansion:
             open.insert(node)
             openIndices[node.location] = node
 
-        selectedNode = open.minheap[0]
-        open.remove()
+        selectedNode = open.remove()
+
+        try:
+            openIndices.pop(selectedNode.location)
+        except:
+            pass
         closed[selectedNode.location] = selectedNode
 
     print(backtrack(selectedNode, startidx, mapToSearch))
+    print(len(open.minheap))
+    print(len(openIndices))
     return openIndices, closed
 
 
 
 # Exactly the same as unweighted Astar but we set the value of weight > 1
 def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
+
     # Selected Node will be initialized to the start node
-    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
-    selectedNode.weight = weight
+    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], weight)
 
     # Open is a Min. Heap
     open = MinHeap()
@@ -95,18 +116,24 @@ def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
 
     while selectedNode.location != endidx:
 
-        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch)
+        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
 
         for node in expansion:
             open.insert(node)
             openIndices[node.location] = node
 
-        selectedNode = open.minheap[0]
-        open.remove()
+        selectedNode = open.remove()
+        try:
+            openIndices.pop(selectedNode.location)
+        except:
+            pass
         closed[selectedNode.location] = selectedNode
 
     print(backtrack(selectedNode, startidx, mapToSearch))
+    print(len(open.minheap))
+    print(len(openIndices))
     return openIndices, closed
+
 
 def Key(idx, i, open, closed, w1):
     g_val = 0
@@ -175,8 +202,11 @@ def MultiHeuristicAStar(startidx, endidx, mapToSearch, w1, w2):
 
 
 if __name__ == "__main__":
-    UnweightedAstarSearch((0,0), (119,159))
-
+    tup = (5,6)
+    dictionary = {(5,6): 'bru'}
+    print(dictionary[tup])
+    del dictionary[tup]
+    # dictionary{tup}
 
 
 

@@ -5,13 +5,17 @@ import constants
 
 class Node():
 
-    weight = 1
 
-    def __init__(self, idx, endidx, prt, valAtIdx, isUniformCost=False, isMultiHeuristic = False):
+
+    def __init__(self, idx, endidx, prt, valAtIdx, weight=1, isUniformCost=False, isMultiHeuristic = False):
         self.location = idx
         self.endidx = endidx
         self.parent = prt
         self.valAtIdx = valAtIdx
+        self.weight = weight
+        self.isUniformCost = isUniformCost
+        self.isMultiHeuristic = isMultiHeuristic
+
 
         if prt is None:
             self.distanceFromStartToCurrent = 0
@@ -37,10 +41,10 @@ class Node():
     def calculateDistanceFromParentToCurrent(self):
 
         transition = str(self.parent.valAtIdx) + str(self.valAtIdx)
-        print(transition)
         direction = None
 
-        # For Unweighted search
+        # print(transition)
+
         if abs(self.parent.location[0] - self.location[0]) == 1 and abs(self.parent.location[1] - self.location[1]) == 1:
             direction = 1
         elif abs(self.parent.location[0] - self.location[0]) == 1 or abs(self.parent.location[1] - self.location[1]) == 1:
@@ -130,10 +134,9 @@ class Node():
 
 
     # Filters by bounds, checks if not in closed list, and if in open list, sets
-    def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
-        print(expansion)
+    def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch, minheap):
         # Remove Blocked values
-        expansion = [Node(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
+        expansion = [Node(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]], self.weight, self.isUniformCost, self.isMultiHeuristic) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
 
         expansion = [node for node in expansion if node.location not in closed]
 
@@ -141,11 +144,16 @@ class Node():
             if node.location in open:
                 if node.sumOfHeuristicAndDistanceFromStartToCurrent < open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent:
                     open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent = node.sumOfHeuristicAndDistanceFromStartToCurrent
+                    open[node.location].parent = node.parent
+                    index = minheap.minheap.index(open[node.location])
+                    minheap.sift_up(index)
                 expansion.remove(node)
 
         return expansion
 
-    def expandNode(self, open, closed, mapToSearch):
+
+
+    def expandNode(self, open, closed, mapToSearch, minheap):
 
         currentRow = self.location[0]
         currentColumn = self.location[1]
@@ -154,7 +162,7 @@ class Node():
         expansion = [(currentRow - 1, currentColumn), (currentRow + 1, currentColumn), (currentRow, currentColumn - 1), (currentRow, currentColumn + 1),
                 (currentRow - 1, currentColumn - 1), (currentRow - 1, currentColumn + 1), (currentRow + 1, currentColumn + 1), (currentRow + 1, currentColumn - 1)]
 
-        return self.FilterAndTurnIntoNode(expansion, open, closed, mapToSearch)
+        return self.FilterAndTurnIntoNode(expansion, open, closed, mapToSearch, minheap)
 
 
 
@@ -162,14 +170,14 @@ class Node():
 
 class UniformCostNode(Node):
 
-    def __init__(self, idx, endidx, prt, valAtIdx, isUniformCost=True):
+    def __init__(self, idx, endidx, prt, valAtIdx, isUniformCost=True, isMultiHeuristic=False):
         super().__init__(idx, endidx, prt, valAtIdx, isUniformCost)
 
         # Filters by bounds, checks if not in closed list, and if in open list, sets
 
-    def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch):
+    def FilterAndTurnIntoNode(self, expansion: list, open: dict, closed: dict, mapToSearch, minheap):
         # Remove Blocked values
-        expansion = [UniformCostNode(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]]) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
+        expansion = [UniformCostNode(idx, self.endidx, self, mapToSearch[idx[0]][idx[1]], self.isUniformCost) for idx in expansion if idx[0] >= 0 and idx[0] < 120 and idx[1] >= 0 and idx[1] < 160 and mapToSearch[idx[0]][idx[1]] != 0]
 
         expansion = [node for node in expansion if node.location not in closed]
 
@@ -177,13 +185,14 @@ class UniformCostNode(Node):
             if node.location in open:
                 if node.distanceFromStartToCurrent < open[node.location].distanceFromStartToCurrent:
                     open[node.location].distanceFromStartToCurrent = node.distanceFromStartToCurrent
+                    index = minheap.minheap.index(open[node.location])
+                    minheap.sift_up(index)
                 expansion.remove(node)
-
         return expansion
 
 if __name__ == "__main__":
 
-    print('0' == 0)
-
+    # test = Node((0,0), (5,5), None, 2, 2)
+    print((5,5) == (5,5))
 
 

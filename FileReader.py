@@ -22,7 +22,7 @@ def readFile(filename):
 
 
 
-    # print(sstart.__str__() + " " + sgoal.__str__() + " " + hardTraverse.__str__() + " " + completeGrid.__str__())
+    print(f"Contents of File:\nstartidx: {sstart}\nendidx: {sgoal}\nhardToTraverse: {hardTraverse}\ncompleteGrid: {completeGrid}\n")
     return sstart, sgoal, hardTraverse, completeGrid
 
 

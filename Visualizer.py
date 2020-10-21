@@ -75,23 +75,23 @@ def read_map(mapfile):
 
 # on Main thread, the pygame visualizaiton will run; on worker thread, a tkinter box will output val for index searched
 
-def chooseAlgorithm(instanceOfMap, startidx, endidx):
+def chooseAlgorithm(mapToSearch, startidx, endidx):
 
     algorithmChoice = input("What Algorithm you would like to Implement?\n").lower()
     open, closed = None, None
 
     if algorithmChoice == "uniformcostsearch":
-        open, closed = UniformCost(startidx, endidx, instanceOfMap.map)
+        open, closed = UniformCost(startidx, endidx, mapToSearch)
     elif algorithmChoice == "unweightedastarsearch":
-        open, closed = UnweightedAstarSearch(startidx, endidx, instanceOfMap.map)
+        open, closed = UnweightedAstarSearch(startidx, endidx, mapToSearch)
     elif algorithmChoice == "weightedastarsearch":
         weight = float(input("What weight would you like to test with?\n"))
-        open, closed = WeightedAstarSearch(startidx, endidx, instanceOfMap.map, weight)
+        open, closed = WeightedAstarSearch(startidx, endidx, mapToSearch, weight)
     elif algorithmChoice == "multipleastarsearch":
         pass
         # open, closed = WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
 
-    threadmanaginglookup = threading.Thread(target=lookup, args=(instanceOfMap.map, open, closed,), daemon=True)
+    threadmanaginglookup = threading.Thread(target=lookup, args=(mapToSearch, open, closed,), daemon=True)
 
     threadmanaginglookup.start()
 
@@ -149,27 +149,39 @@ def main():
     if (input("Would you like to run the test suite? Type 'yes' or 'no'\n")) == 'yes':
         testSuite()
     else:
-        """
-        Below randomly generates a map and a start and end idx.
-        Can choose which algorithm to run according to the choosingAlgorithm(...) in these files.
-        When prompted, Please type exactly as indicated in the if-else statements of choosingAlgorithm(...).
-        
-        Requirements To Run This:
-        ** Pygame **
-        
-        
-        """
-        instanceOfMap = MapData()
-        instanceOfMap.runSuite()
-        startidx, endidx = instanceOfMap.generateStartAndEndIndices()
+        if(input("Would you like to read an existing file? Type 'yes' or 'no'\n") == 'yes'):
+            file = input("Which File would you like to Run? (in Maps Folder)\n")
+            startidx, endidx, hardTraverse, completeGrid = readFile(file)
 
-        chooseAlgorithm(instanceOfMap, startidx, endidx)
+            chooseAlgorithm(completeGrid, startidx, endidx)
+
+            surface = initialize_game()
+
+            game_loop(surface, completeGrid)
 
 
-        surface = initialize_game()
+        else:
+            """
+            Below randomly generates a map and a start and end idx.
+            Can choose which algorithm to run according to the choosingAlgorithm(...) in these files.
+            When prompted, Please type exactly as indicated in the if-else statements of choosingAlgorithm(...).
+            
+            Requirements To Run This:
+            ** Pygame **
+            
+            
+            """
+            instanceOfMap = MapData()
+            instanceOfMap.runSuite()
+            startidx, endidx = instanceOfMap.generateStartAndEndIndices()
+
+            chooseAlgorithm(instanceOfMap.map, startidx, endidx)
 
 
-        game_loop(surface, instanceOfMap.map)
+            surface = initialize_game()
+
+
+            game_loop(surface, instanceOfMap.map)
 
 
 

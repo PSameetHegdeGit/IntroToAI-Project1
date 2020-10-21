@@ -32,7 +32,7 @@ class Node():
 
 
         if not isUniformCost:
-            self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.weight * self.calculateEuclideanHeuristic(self.endidx)
+            self.sumOfHeuristicAndDistanceFromStartToCurrent = self.distanceFromStartToCurrent + self.weight * (self.calculateEuclideanHeuristic(self.endidx))
 
     def __eq__(self, other):
         if isinstance(other, Node):

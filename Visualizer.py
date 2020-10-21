@@ -147,18 +147,18 @@ def testSuite():
 def main():
 
     # Choosing algorithm
-    instanceOfMap = MapData()
-    instanceOfMap.runSuite()
-    startidx, endidx = instanceOfMap.generateStartAndEndIndices()
-
-    chooseAlgorithm(instanceOfMap, startidx, endidx)
-
-
-    surface = initialize_game()
-
-
-    game_loop(surface, instanceOfMap.map)
-    # testSuite()
+    # instanceOfMap = MapData()
+    # instanceOfMap.runSuite()
+    # startidx, endidx = instanceOfMap.generateStartAndEndIndices()
+    #
+    # chooseAlgorithm(instanceOfMap, startidx, endidx)
+    #
+    #
+    # surface = initialize_game()
+    #
+    #
+    # game_loop(surface, instanceOfMap.map)
+    testSuite()
 
 if __name__=="__main__":
     main()

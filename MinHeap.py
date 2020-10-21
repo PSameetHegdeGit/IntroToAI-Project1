@@ -25,7 +25,6 @@ class MinHeap():
 
 
         while child1 < lengthOfMinHeap:
-            smallerChild = 0
             if child2 < lengthOfMinHeap:
                 smallerChild = child1 if self.minheap[child1].sumOfHeuristicAndDistanceFromStartToCurrent <= self.minheap[child2].sumOfHeuristicAndDistanceFromStartToCurrent else child2
             else:
@@ -82,9 +81,7 @@ class MinHeapForUniform(MinHeap):
         lengthOfMinHeap = len(self.minheap)
 
 
-
         while child1 < lengthOfMinHeap:
-            smallerChild = 0
             if child2 < lengthOfMinHeap:
                 smallerChild = child1 if self.minheap[child1].distanceFromStartToCurrent <= self.minheap[child2].distanceFromStartToCurrent else child2
             else:

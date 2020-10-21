@@ -24,121 +24,136 @@ def backtrackTesting(node: Node, startidx: tuple, mapToSearch):
 
 def UniformCost(startidx, endidx, mapToSearch):
 
-    # Selected Node will be initialized to the start node
-    selectedNode = UniformCostNode(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
+    try:
+        # Selected Node will be initialized to the start node
+        selectedNode = UniformCostNode(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
-    # Open is a Min. Heap
-    open = MinHeapForUniform()
+        # Open is a Min. Heap
+        open = MinHeapForUniform()
 
-    # Using dictionary instead of array to improve search time; having a separate heap and openindices
-    openIndices = {}
-    closed = {}
-
-
-    while selectedNode.location != endidx:
-
-        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
-
-        for node in expansion:
-            open.insert(node)
-            openIndices[node.location] = node
-
-        selectedNode = open.remove()
-
-        openIndices.pop(selectedNode.location)
+        # Using dictionary instead of array to improve search time; having a separate heap and openindices
+        openIndices = {}
+        closed = {}
 
 
-        if len(openIndices) == 0:
-            print("Sorry unreachable!")
-            return openIndices, closed
+        while selectedNode.location != endidx:
 
-        closed[selectedNode.location] = selectedNode
+            expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
+
+            for node in expansion:
+                open.insert(node)
+                openIndices[node.location] = node
+
+            selectedNode = open.remove()
+
+            try:
+                openIndices.pop(selectedNode.location)
+            except:
+                pass
+
+            if len(openIndices) == 0:
+                print("Sorry unreachable!")
+                return openIndices, closed
+
+            closed[selectedNode.location] = selectedNode
 
 
-    print(backtrack(selectedNode, startidx, mapToSearch))
-    return openIndices, closed
+        print(backtrack(selectedNode, startidx, mapToSearch))
+        return openIndices, closed
+    except:
+        print("Search Failed!")
+        return None, closed
+
 
 
 
 # TODO: Need to modify this code for weighted search
 def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 
-    # Selected Node will be initialized to the start node
-    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
+    try:
+        # Selected Node will be initialized to the start node
+        selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
-    # Open is a Min. Heap
-    open = MinHeap()
+        # Open is a Min. Heap
+        open = MinHeap()
 
-    # Using dictionary instead of array to improve search time; having a separate heap and openindices
-    openIndices = {}
-    closed = {}
+        # Using dictionary instead of array to improve search time; having a separate heap and openindices
+        openIndices = {}
+        closed = {}
 
-    while selectedNode.location != endidx:
+        while selectedNode.location != endidx:
 
-        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
+            expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
 
-        for node in expansion:
-            open.insert(node)
-            openIndices[node.location] = node
+            for node in expansion:
+                open.insert(node)
+                openIndices[node.location] = node
 
-        selectedNode = open.remove()
-        try:
-            openIndices.pop(selectedNode.location)
-        except:
-            pass
+            selectedNode = open.remove()
+            try:
+                openIndices.pop(selectedNode.location)
+            except:
+                pass
 
-        if len(openIndices) == 0:
-            print("Sorry unreachable!")
-            return openIndices, closed
+            if len(openIndices) == 0:
+                print("Sorry unreachable!")
+                return openIndices, closed
 
-        closed[selectedNode.location] = selectedNode
+            closed[selectedNode.location] = selectedNode
 
 
-    print(backtrack(selectedNode, startidx, mapToSearch))
+        print(backtrack(selectedNode, startidx, mapToSearch))
 
-    return openIndices, closed
+        return openIndices, closed
+    except:
+        print("Search Failed!")
+        return None, closed
+
 
 
 
 # Exactly the same as unweighted Astar but we set the value of weight > 1
 def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
+    try:
+        # Selected Node will be initialized to the start node
+        selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], weight)
 
-    # Selected Node will be initialized to the start node
-    selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], weight)
+        # Open is a Min. Heap
+        open = MinHeap()
 
-    # Open is a Min. Heap
-    open = MinHeap()
-
-    # Using dictionary instead of array to improve search time; having a separate heap and openindices
-    openIndices = {}
-    closed = {}
-
-
-    while selectedNode.location != endidx:
-
-        expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
-
-        for node in expansion:
-            open.insert(node)
-            openIndices[node.location] = node
-
-        selectedNode = open.remove()
-        try:
-            openIndices.pop(selectedNode.location)
-        except:
-            pass
+        # Using dictionary instead of array to improve search time; having a separate heap and openindices
+        openIndices = {}
+        closed = {}
 
 
-        if len(openIndices) == 0:
-            print("Sorry unreachable!")
-            return openIndices, closed
+        while selectedNode.location != endidx:
 
-        closed[selectedNode.location] = selectedNode
+            expansion = selectedNode.expandNode(openIndices, closed, mapToSearch, open)
+
+            for node in expansion:
+                open.insert(node)
+                openIndices[node.location] = node
+
+            selectedNode = open.remove()
+            try:
+                openIndices.pop(selectedNode.location)
+            except:
+                pass
 
 
-    print(backtrack(selectedNode, startidx, mapToSearch))
+            if len(openIndices) == 0:
+                print("Sorry unreachable!")
+                return openIndices, closed
 
-    return openIndices, closed
+            closed[selectedNode.location] = selectedNode
+
+
+        print(backtrack(selectedNode, startidx, mapToSearch))
+
+        return openIndices, closed
+    except:
+        print("search failed!")
+        return None, closed
 
 
 def Key(node, i, endidx, w1):

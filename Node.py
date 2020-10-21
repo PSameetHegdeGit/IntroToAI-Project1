@@ -185,6 +185,7 @@ class UniformCostNode(Node):
             if node.location in open:
                 if node.distanceFromStartToCurrent < open[node.location].distanceFromStartToCurrent:
                     open[node.location].distanceFromStartToCurrent = node.distanceFromStartToCurrent
+                    open[node.location].parent = node.parent
                     index = minheap.minheap.index(open[node.location])
                     minheap.sift_up(index)
                 expansion.remove(node)

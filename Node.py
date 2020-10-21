@@ -105,7 +105,7 @@ class Node():
         endRow = endidx[0]
         endColumn = endidx[1]
 
-        return max(abs(endRow - currentRow), abs(endColumn - currentColumn))
+        return max(abs(endRow - currentRow), abs(endColumn - currentColumn)) / 3
 
     def calculateOctileHeuristic(self, endidx: tuple):
         currentRow = self.location[0]

@@ -21,15 +21,23 @@ class MinHeap():
     def sift_down(self, idx):
         child1 = idx * 2 + 1
         child2 = idx * 2 + 2
+        lengthOfMinHeap = len(self.minheap)
 
-        try:
-            greaterChild = child1 if self.minheap[child1].sumOfHeuristicAndDistanceFromStartToCurrent <= self.minheap[child2].sumOfHeuristicAndDistanceFromStartToCurrent else child2
-            self.swap(idx, greaterChild)
-            self.sift_down(greaterChild)
 
-        # Index out of bounds error
-        except IndexError:
-            return
+        while child1 < lengthOfMinHeap:
+            smallerChild = 0
+            if child2 < lengthOfMinHeap:
+                smallerChild = child1 if self.minheap[child1].sumOfHeuristicAndDistanceFromStartToCurrent <= self.minheap[child2].sumOfHeuristicAndDistanceFromStartToCurrent else child2
+            else:
+                smallerChild = child1
+
+            if self.minheap[smallerChild].sumOfHeuristicAndDistanceFromStartToCurrent < self.minheap[idx].sumOfHeuristicAndDistanceFromStartToCurrent:
+                self.swap(idx, smallerChild)
+                idx = smallerChild
+                child1 = idx * 2 + 1
+                child2 = idx * 2 + 2
+            else:
+                break
 
 
     def swap(self, a, b):
@@ -71,12 +79,21 @@ class MinHeapForUniform(MinHeap):
     def sift_down(self, idx):
         child1 = idx * 2 + 1
         child2 = idx * 2 + 2
+        lengthOfMinHeap = len(self.minheap)
 
-        try:
-            greaterChild = child1 if self.minheap[child1].distanceFromStartToCurrent <= self.minheap[child2].distanceFromStartToCurrent else child2
-            self.swap(idx, greaterChild)
-            self.sift_down(greaterChild)
 
-        # Index out of bounds error
-        except IndexError:
-            return
+
+        while child1 < lengthOfMinHeap:
+            smallerChild = 0
+            if child2 < lengthOfMinHeap:
+                smallerChild = child1 if self.minheap[child1].distanceFromStartToCurrent <= self.minheap[child2].distanceFromStartToCurrent else child2
+            else:
+                smallerChild = child1
+
+            if self.minheap[smallerChild].distanceFromStartToCurrent < self.minheap[idx].distanceFromStartToCurrent:
+                self.swap(idx, smallerChild)
+                idx = smallerChild
+                child1 = idx * 2 + 1
+                child2 = idx * 2 + 2
+            else:
+                break

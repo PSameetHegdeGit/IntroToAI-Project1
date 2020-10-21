@@ -146,6 +146,8 @@ class Node():
 
         expansion = [node for node in expansion if node.location not in closed]
 
+        expansionToSend = []
+
         for node in expansion:
             if node.location in open:
                 if node.sumOfHeuristicAndDistanceFromStartToCurrent < open[node.location].sumOfHeuristicAndDistanceFromStartToCurrent:
@@ -154,6 +156,8 @@ class Node():
                     index = minheap.minheap.index(open[node.location])
                     minheap.sift_up(index)
                 expansion.remove(node)
+            else:
+                expansionToSend.append(node)
 
         return expansion
 
@@ -187,6 +191,8 @@ class UniformCostNode(Node):
 
         expansion = [node for node in expansion if node.location not in closed]
 
+        expansionToSend = []
+
         for node in expansion:
             if node.location in open:
                 if node.distanceFromStartToCurrent < open[node.location].distanceFromStartToCurrent:
@@ -194,8 +200,9 @@ class UniformCostNode(Node):
                     open[node.location].parent = node.parent
                     index = minheap.minheap.index(open[node.location])
                     minheap.sift_up(index)
-                expansion.remove(node)
-        return expansion
+            else:
+                expansionToSend.append(node)
+        return expansionToSend
 
 if __name__ == "__main__":
 

@@ -141,43 +141,43 @@ def testSuite():
 
 def main():
 
-    # if (input("Would you like to run the test suite? Type 'yes' or 'no'\n")) == 'yes':
-    #     testSuite()
-    # else:
-    #     if(input("Would you like to read an existing file? Type 'yes' or 'no'\n") == 'yes'):
-    #         file = input("Which File would you like to Run? (in Maps Folder)\n")
-    #         startidx, endidx, hardTraverse, completeGrid = readFile(file)
-    #
-    #         chooseAlgorithm(completeGrid, startidx, endidx)
-    #
-    #         surface = initialize_game()
-    #
-    #         game_loop(surface, completeGrid)
-    #
-    #
-    #     else:
-    #         """
-    #         Below randomly generates a map and a start and end idx.
-    #         Can choose which algorithm to run according to the choosingAlgorithm(...) in these files.
-    #         When prompted, Please type exactly as indicated in the if-else statements of choosingAlgorithm(...).
-    #
-    #         Requirements To Run This:
-    #         ** Pygame **
-    #
-    #
-    #         """
-    #         instanceOfMap = MapData()
-    #         instanceOfMap.runSuite()
-    #         startidx, endidx = instanceOfMap.generateStartAndEndIndices()
-    #
-    #         chooseAlgorithm(instanceOfMap.map, startidx, endidx)
-    #
-    #
-    #         surface = initialize_game()
-    #
-    #
-    #         game_loop(surface, instanceOfMap.map)
-            testSuite()
+    if (input("Would you like to run the test suite? Type 'yes' or 'no'\n")) == 'yes':
+        testSuite()
+    else:
+        if(input("Would you like to read an existing file? Type 'yes' or 'no'\n") == 'yes'):
+            file = input("Which File would you like to Run? (in Maps Folder)\n")
+            startidx, endidx, hardTraverse, completeGrid = readFile(file)
+
+            chooseAlgorithm(completeGrid, startidx, endidx)
+
+            surface = initialize_game()
+
+            game_loop(surface, completeGrid)
+
+
+        else:
+            """
+            Below randomly generates a map and a start and end idx.
+            Can choose which algorithm to run according to the choosingAlgorithm(...) in these files.
+            When prompted, Please type exactly as indicated in the if-else statements of choosingAlgorithm(...).
+
+            Requirements To Run This:
+            ** Pygame **
+
+
+            """
+            instanceOfMap = MapData()
+            instanceOfMap.runSuite()
+            startidx, endidx = instanceOfMap.generateStartAndEndIndices()
+
+            chooseAlgorithm(instanceOfMap.map, startidx, endidx)
+
+
+            surface = initialize_game()
+
+
+            game_loop(surface, instanceOfMap.map)
+            # testSuite()
 
 
 

@@ -88,8 +88,8 @@ def chooseAlgorithm(mapToSearch, startidx, endidx):
         weight = float(input("What weight would you like to test with?\n"))
         open, closed = WeightedAstarSearch(startidx, endidx, mapToSearch, weight)
     elif algorithmChoice == "multipleastarsearch":
-        pass
-        # open, closed = WeightedAstarSearch(instanceOfMap.startindex, instanceOfMap.endIndex, instanceOfMap.map, 2.5)
+        weight = float(input("What weight would you like to test with?\n"))
+        open, closed = MultiHeuristicAStar(startidx, endidx, mapToSearch, weight, 1)
 
     threadmanaginglookup = threading.Thread(target=lookup, args=(mapToSearch, open, closed,), daemon=True)
 
@@ -111,10 +111,7 @@ def testSuite():
         startidx2, endidx2, hardTraverse2, completeGridUnweighted = readFile(filename)
         startidx3, endidx3, hardTraverse3, completeGridSmallWeighted = readFile(filename)
         startidx4, endidx4, hardTraverse4, completeGridLargeWeighted = readFile(filename)
-        # starttime = timeit.default_timer()
-
-
-
+        starttime = timeit.default_timer()
 
         openUniformCost, closedUniformCost = UniformCost(startidx, endidx, completeGrid)
         ucmem = psutil.virtual_memory().percentage

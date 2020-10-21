@@ -27,7 +27,7 @@ class Node():
             else:
                 for i in range(5):
                     self.distanceFromStartToCurrent[i] = prt.distanceFromStartToCurrent[i] + self.calculateDistanceFromParentToCurrent()
-                    self.bestparent = prt
+                    self.bestparent[i] = prt
 
 
 

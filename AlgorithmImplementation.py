@@ -185,45 +185,50 @@ def ExpandState(selectedNode, i, open, closed, endidx, mapToSearch, w1):
 
 
 def MultiHeuristicAStar(startidx, endidx, mapToSearch, w1, w2):
-    startNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)
-    goalNode = Node(endidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)
+    try:
+        startNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)
+        goalNode = Node(endidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], False, True)
 
-    open = [[]] * 5
-    closed = [[]] * 5
+        open = [[]] * 5
+        closed = [[]] * 5
 
-    for i in range(5):
-        startNode.distanceFromStartToCurrent[i] = 0
-        goalNode.distanceFromStartToCurrent[i] = float('inf')
-        startNode.bestparent[i] = None
-        goalNode.bestparent[i] = None
-        heapq.heappush(open[i], (Key(startNode, i, endidx, w1), startNode))
-        keys = [[]] * 5
-    for node in open[0]:
-        keys[0].append(Key(node, 0, endidx, w1))
-    while min(keys[0]) < float('inf'):
-        for i in range(1, 5):
-            for node in open[i]:
-                keys[i].append(Key(node, i, endidx, w1))
-            if min(keys[i]) <= w2 * min(keys[0]):
-                if goalNode.distanceFromStartToCurrent[i] <= min(keys[i]):
-                    if goalNode.distanceFromStartToCurrent[i] <= float('inf'):
-                        return goalNode.bestparent[i]
-                else:
-                    selectedNode = heapq.heappop(open[i])
-                    ExpandState(selectedNode, i, open[i], closed[i])
-                    closed[i].append(selectedNode)
-            else:
-                if goalNode.distanceFromStartToCurrent[0] <= min(keys[0]):
-                    if goalNode.distanceFromStartToCurrent[0] <= float('inf'):
-                        return goalNode.bestparent[0]
-                else:
-                    selectedNode = heapq.heappop(open[0])
-                    ExpandState(selectedNode, 0, open[0], closed[0])
-                    closed[0].append(selectedNode)
-        keys[0].clear()
+        for i in range(5):
+            startNode.distanceFromStartToCurrent[i] = 0
+            goalNode.distanceFromStartToCurrent[i] = float('inf')
+            startNode.bestparent[i] = None
+            goalNode.bestparent[i] = None
+            heapq.heappush(open[i], (Key(startNode, i, endidx, w1), startNode))
+            keys = [[]] * 5
         for node in open[0]:
             keys[0].append(Key(node, 0, endidx, w1))
+        while min(keys[0]) < float('inf'):
+            for i in range(1, 5):
+                for node in open[i]:
+                    keys[i].append(Key(node, i, endidx, w1))
+                if min(keys[i]) <= w2 * min(keys[0]):
+                    if goalNode.distanceFromStartToCurrent[i] <= min(keys[i]):
+                        if goalNode.distanceFromStartToCurrent[i] <= float('inf'):
+                            return goalNode.bestparent[i]
+                    else:
+                        selectedNode = heapq.heappop(open[i])
+                        ExpandState(selectedNode, i, open[i], closed[i])
+                        closed[i].append(selectedNode)
+                else:
+                    if goalNode.distanceFromStartToCurrent[0] <= min(keys[0]):
+                        if goalNode.distanceFromStartToCurrent[0] <= float('inf'):
+                            return goalNode.bestparent[0]
+                    else:
+                        selectedNode = heapq.heappop(open[0])
+                        ExpandState(selectedNode, 0, open[0], closed[0])
+                        closed[0].append(selectedNode)
+            keys[0].clear()
+            for node in open[0]:
+                keys[0].append(Key(node, 0, endidx, w1))
 
+        return open, closed
+    except:
+        pass
+    return None, None
 
 
 

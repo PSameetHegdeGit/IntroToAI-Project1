@@ -1,13 +1,15 @@
-import math
-import constants
 import heapq
 from MinHeap import *
 from Node import *
 
+
+
 def backtrack(node: Node, startidx: tuple, mapToSearch):
 
+    """
+        Prints out indices of optimal path from end back to start and sets those indices to optimal
+    """
 
-    #Recursively call backtrack until we reach a node with start idx
     if node.location == startidx:
         mapToSearch[node.location[0]][node.location[1]] = 'optimal'
         return node.location
@@ -16,7 +18,10 @@ def backtrack(node: Node, startidx: tuple, mapToSearch):
 
 def backtrackTesting(node: Node, startidx: tuple, mapToSearch):
 
-    #Recursively call backtrack until we reach a node with start idx
+    """
+            Prints out indices of optimal path from end back to start but specifically used for testing
+    """
+
     if node.location == startidx:
         return 1
     return 1 + backtrackTesting(node.parent, startidx, mapToSearch)
@@ -24,14 +29,13 @@ def backtrackTesting(node: Node, startidx: tuple, mapToSearch):
 
 def UniformCost(startidx, endidx, mapToSearch):
 
+
+
     try:
-        # Selected Node will be initialized to the start node
         selectedNode = UniformCostNode(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
-        # Open is a Min. Heap
         open = MinHeapForUniform()
 
-        # Using dictionary instead of array to improve search time; having a separate heap and openindices
         openIndices = {}
         closed = {}
 
@@ -67,17 +71,13 @@ def UniformCost(startidx, endidx, mapToSearch):
 
 
 
-# TODO: Need to modify this code for weighted search
 def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 
     try:
-        # Selected Node will be initialized to the start node
         selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]])
 
-        # Open is a Min. Heap
         open = MinHeap()
 
-        # Using dictionary instead of array to improve search time; having a separate heap and openindices
         openIndices = {}
         closed = {}
 
@@ -112,16 +112,12 @@ def UnweightedAstarSearch(startidx, endidx, mapToSearch):
 
 
 
-# Exactly the same as unweighted Astar but we set the value of weight > 1
 def WeightedAstarSearch(startidx, endidx, mapToSearch, weight):
     try:
-        # Selected Node will be initialized to the start node
         selectedNode = Node(startidx, endidx, None, mapToSearch[startidx[0]][startidx[1]], weight)
 
-        # Open is a Min. Heap
         open = MinHeap()
 
-        # Using dictionary instead of array to improve search time; having a separate heap and openindices
         openIndices = {}
         closed = {}
 
@@ -229,12 +225,6 @@ def MultiHeuristicAStar(startidx, endidx, mapToSearch, w1, w2):
             keys[0].append(Key(node, 0, endidx, w1))
 
 
-if __name__ == "__main__":
-    tup = (5,6)
-    dictionary = {(5,6): 'bru'}
-    print(dictionary[tup])
-    del dictionary[tup]
-    # dictionary{tup}
 
 
 

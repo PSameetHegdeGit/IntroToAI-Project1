@@ -1,19 +1,19 @@
 
-#May want to use pandas dataframe instead of a numpy array
-import pandas
-import numpy as np
 import random
 import constants
 import math
 from helper import *
 
 
-# May want to make this into a class or just a list of methods (idk which would be better)
 class MapData():
+    """
+    Generates the map as specified in project description
 
+    self.map is the map generated after runsuite() and generateStartandEndIndices() is called
+
+    """
 
     def __init__(self):
-        #object lvl fields can be initialized in here
         self.map = []
         self.hardToTraverseIndices = []
 
@@ -46,7 +46,6 @@ class MapData():
             self.hardToTraverseIndices.append((x,y))
 
 
-    # Noticed bug where path does not extend 20 cells for a single translation
     def generateBoostCells(self):
 
         selections = {"R1": 0, "C1": 0, "R2": 119, "C2": 159}
@@ -59,11 +58,9 @@ class MapData():
                 newrow, newcolumn = self.generateBoostCellsInitialStep(sideSelection, selections[sideSelection], indicesOfPath)
                 self.generateBoostCellsLaterSteps(newrow, newcolumn, sideSelection, indicesOfPath)
 
-                  # if count is greater than 100 our highway is valid
                 if len(indicesOfPath) >= 100:
                     break
 
-            # Raise an exception on collision with an already established path
             except CollisionError:
                 pass
 
@@ -71,7 +68,6 @@ class MapData():
             indicesOfPath.clear()
 
 
-    # Function resets the values of path back to one
     def resetPathValues(self, indicesOfPath):
         for idx in indicesOfPath:
             self.map[idx[0]][idx[1]] = 1
@@ -129,9 +125,6 @@ class MapData():
 
 
 
-
-
-    # Given a particular direction move by 20 -- NEEDS TO BE MODIFIED
     def translate20Cells(self, route, row, column, indicesOfPath):
 
         if route == "Up":
@@ -164,9 +157,7 @@ class MapData():
 
 
         while idx is None or self.map[idx[0]][idx[1]] == 0:
-            print(idx)
-            if idx is not None:
-                print(self.map[idx[0]][idx[1]])
+
             if region == 'TOP':
                 idx = (random.randrange(0,20), random.randrange(0, 160))
             elif region  == 'BOTTOM':
@@ -175,9 +166,6 @@ class MapData():
                 idx = (random.randrange(0, 120), random.randrange(0,20))
             elif region == 'RIGHT':
                 idx = (random.randrange(0, 120), random.randrange(139, 160))
-
-        print(idx)
-        print(self.map[idx[0]][idx[1]])
 
         return idx
 
@@ -203,13 +191,6 @@ class MapData():
 
 
 
-
-
-if __name__ == "__main__":
-    testMap = MapData()
-    testMap.runSuite()
-    testMap.generateStartAndEndIndices()
-    print(testMap.map)
 
 
 

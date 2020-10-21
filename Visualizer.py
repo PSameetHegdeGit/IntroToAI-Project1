@@ -96,14 +96,14 @@ def chooseAlgorithm(instanceOfMap, startidx, endidx):
     threadmanaginglookup.start()
 
 def testSuite():
-    # wb = xlsxwriter.Workbook('list.xlsx')
-    # sheet = wb.add_worksheet()
-    # headers = ["MAP #", "UC RUNTIME", "UC MEM USAGE", "UC PATH LENGTH/OPTIMAL LENGTH", "UC NUM NODES EXPANDED",
-    #             "A* RUNTIME", "A* MEM USAGE", "A* PATH LENGTH/OPTIMAL LENGTH", "A* NUM NODES EXPANDED",
-    #             "1.25 WEIGHT A* RUNTIME", "1.25 WEIGHT A* MEM USAGE", "1.25 WEIGHT A* PATH LENGTH/OPTIMAL LENGTH", "1.25 WEIGHT A* NUM NODES EXPANDED",
-    #             "2 WEIGHT A* RUNTIME", "2 WEIGHT A* MEM USAGE", "2 WEIGHT A* PATH LENGTH/OPTIMAL LENGTH", "2 WEIGHT A* NUM NODES EXPANDED"]
-    # for col_num, data in enumerate(headers):
-    #     sheet.write(0, col_num, data)
+    wb = xlsxwriter.Workbook('list.xlsx')
+    sheet = wb.add_worksheet()
+    headers = ["MAP #", "UC RUNTIME", "UC MEM USAGE", "UC PATH LENGTH/OPTIMAL LENGTH", "UC NUM NODES EXPANDED",
+                "A* RUNTIME", "A* MEM USAGE", "A* PATH LENGTH/OPTIMAL LENGTH", "A* NUM NODES EXPANDED",
+                "1.25 WEIGHT A* RUNTIME", "1.25 WEIGHT A* MEM USAGE", "1.25 WEIGHT A* PATH LENGTH/OPTIMAL LENGTH", "1.25 WEIGHT A* NUM NODES EXPANDED",
+                "2 WEIGHT A* RUNTIME", "2 WEIGHT A* MEM USAGE", "2 WEIGHT A* PATH LENGTH/OPTIMAL LENGTH", "2 WEIGHT A* NUM NODES EXPANDED"]
+    for col_num, data in enumerate(headers):
+        sheet.write(0, col_num, data)
     for x in range(50):
         print(x)
         filename = "map_" + str(x // 10) + "_" + str(x % 10) + ".txt"
@@ -117,48 +117,61 @@ def testSuite():
 
 
         openUniformCost, closedUniformCost = UniformCost(startidx, endidx, completeGrid)
-        # ucmem = psutil.virtual_memory().percentage
-        # ucruntime = timeit.default_timer() - starttime
-        # ucnodes = len(closedUniformCost) + len(openUniformCost)
-        # ucpath = AlgorithmImplementation.backtrackTesting(closedUniformCost[endidx], startidx, completeGrid)
-        # starttime = timeit.default_timer()
+        ucmem = psutil.virtual_memory().percentage
+        ucruntime = timeit.default_timer() - starttime
+        ucnodes = len(closedUniformCost) + len(openUniformCost)
+        ucpath = AlgorithmImplementation.backtrackTesting(closedUniformCost[endidx], startidx, completeGrid)
+        starttime = timeit.default_timer()
         openUnweightedStar, closedUnweightedStar = UnweightedAstarSearch(startidx2, endidx2, completeGridUnweighted)
-        # amem = psutil.virtual_memory().percentage
-        # aruntime = timeit.default_timer() - starttime
-        # anodes = len(closedUnweightedStar) + len(openUnweightedStar)
-        # apath = AlgorithmImplementation.backtrackTesting(closedUnweightedStar[endidx], startidx, completeGrid)
-        # starttime = timeit.default_timer()
+        amem = psutil.virtual_memory().percentage
+        aruntime = timeit.default_timer() - starttime
+        anodes = len(closedUnweightedStar) + len(openUnweightedStar)
+        apath = AlgorithmImplementation.backtrackTesting(closedUnweightedStar[endidx], startidx, completeGrid)
+        starttime = timeit.default_timer()
         openSmallWeightedStar, closedSmallWeightedStar = WeightedAstarSearch(startidx3, endidx3, completeGridSmallWeighted, 1.5)
-        # swmem = psutil.virtual_memory().percentage
-        # swruntime = timeit.default_timer() - starttime
-        # swnodes = len(closedSmallWeightedStar) + len(openSmallWeightedStar)
-        # swpath = AlgorithmImplementation.backtrackTesting(closedSmallWeightedStar[endidx], startidx, completeGrid)
-        # starttime = timeit.default_timer()
+        swmem = psutil.virtual_memory().percentage
+        swruntime = timeit.default_timer() - starttime
+        swnodes = len(closedSmallWeightedStar) + len(openSmallWeightedStar)
+        swpath = AlgorithmImplementation.backtrackTesting(closedSmallWeightedStar[endidx], startidx, completeGrid)
+        starttime = timeit.default_timer()
         openLargeWeightedStar, closedLargeWeightedStar = WeightedAstarSearch(startidx4, endidx4, completeGridLargeWeighted, 5)
-        # lwmem = psutil.virtual_memory().percentage
-        # lwruntime = timeit.default_timer() - starttime
-        # lwnodes = len(closedLargeWeightedStar) + len(openLargeWeightedStar)
-        # lwpath = AlgorithmImplementation.backtrackTesting(closedLargeWeightedStar[endidx], startidx, completeGrid)
-        # row = [x, ucruntime, ucmem, ucpath, ucnodes, aruntime, amem, apath, anodes, swruntime, swmem, swpath, swnodes, lwruntime, lwmem, lwpath, lwnodes]
-        # for col_num, data in enumerate(row):
-        #     sheet.write(x+1, col_num, data)
-        # wb.close()
+        lwmem = psutil.virtual_memory().percentage
+        lwruntime = timeit.default_timer() - starttime
+        lwnodes = len(closedLargeWeightedStar) + len(openLargeWeightedStar)
+        lwpath = AlgorithmImplementation.backtrackTesting(closedLargeWeightedStar[endidx], startidx, completeGrid)
+        row = [x, ucruntime, ucmem, ucpath, ucnodes, aruntime, amem, apath, anodes, swruntime, swmem, swpath, swnodes, lwruntime, lwmem, lwpath, lwnodes]
+        for col_num, data in enumerate(row):
+            sheet.write(x+1, col_num, data)
+        wb.close()
 
 def main():
 
-    # Choosing algorithm
-    # instanceOfMap = MapData()
-    # instanceOfMap.runSuite()
-    # startidx, endidx = instanceOfMap.generateStartAndEndIndices()
-    #
-    # chooseAlgorithm(instanceOfMap, startidx, endidx)
-    #
-    #
-    # surface = initialize_game()
-    #
-    #
-    # game_loop(surface, instanceOfMap.map)
-    testSuite()
+    if (input("Would you like to run the test suite? Type 'yes' or 'no'\n")) == 'yes':
+        testSuite()
+    else:
+        """
+        Below randomly generates a map and a start and end idx.
+        Can choose which algorithm to run according to the choosingAlgorithm(...) in these files.
+        When prompted, Please type exactly as indicated in the if-else statements of choosingAlgorithm(...).
+        
+        Requirements To Run This:
+        ** Pygame **
+        
+        
+        """
+        instanceOfMap = MapData()
+        instanceOfMap.runSuite()
+        startidx, endidx = instanceOfMap.generateStartAndEndIndices()
+
+        chooseAlgorithm(instanceOfMap, startidx, endidx)
+
+
+        surface = initialize_game()
+
+
+        game_loop(surface, instanceOfMap.map)
+
+
 
 if __name__=="__main__":
     main()

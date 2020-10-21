@@ -1,8 +1,6 @@
 from Node import Node
 
 
-
-
 class MinHeap():
 
     def __init__(self):

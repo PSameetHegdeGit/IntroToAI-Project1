@@ -23,9 +23,15 @@ class Node():
             self.distanceFromStartToCurrent = prt.distanceFromStartToCurrent + self.calculateDistanceFromParentToCurrent()
 
         if isMultiHeuristic:
-            self.calculateCanberraHeuristic(self.endidx)
-            self.calculateChebyshevHeuristic(self.endidx)
-            self.calculateBrayCurtisHeuristic(self.endidx)
+            if prt is None:
+                self.distanceFromStartToCurrent = [0]*5
+                self.bestparent = [None] * 5
+            else:
+                for i in range(5):
+                    self.distanceFromStartToCurrent[i] = prt.distanceFromStartToCurrent[i] + self.calculateDistanceFromParentToCurrent()
+                    self.bestparent = prt
+
+
 
         # when weight is one we're performing a unweighted search, when weight > 1 we are performing a weighted search
         if not isUniformCost:
